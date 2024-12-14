@@ -21,38 +21,55 @@ span {
     background-repeat: no-repeat;
 }
 
-#scoreboardLeft {
-    background-image: url("../../../imgs/Left\ Title-box.png");
-    animation: opacityHalfFadeIn;
-    animation-duration: 2s;
-}
-#player1SetScore {
-    background-image: url("../../../imgs/Left-player-set.png");
+#player1Name {
+    background-image: url("../../../imgs/Left-player-name.png");
     animation: opacityHalfFadeIn;
     animation-duration: 2s;
 }
 
-#scoreboardMiddle {
+#player1Set {
+    background-image: url("../../../imgs/Left-player-set.png");
+    animation: opacityHalfFadeIn;
+    animation-duration: 2s;
+}
+#player2Set {
+    background-image: url("../../../imgs/Right-player-set.png");
+    animation: opacityHalfFadeIn;
+    animation-duration: 2s;
+}
+
+#player1Score {
+    background-image: url("../../../imgs/Left-player-score.png");
+    animation: opacityHalfFadeIn;
+    animation-duration: 2s;
+}
+#player2Score {
+    background-image: url("../../../imgs/Right-player-score.png");
+    animation: opacityHalfFadeIn;
+    animation-duration: 2s;
+}
+
+#player1State {
     background-image: url("../../../imgs/Left-State-name.png");
     animation: opacityGradualFadeIn;
     animation-duration: 1s;
     z-index: -1;
 }
 
-#scoreboardBottom {
+#player2State {
     background-image: url("../../../imgs/Right-State-name.png");
     animation: opacityHalfFadeIn;
     animation-duration: 3s;
     z-index: -1;
 }
 
-#scoreboardRight {
+#player2Name {
     background-image: url("../../../imgs/Right-Title-box.png");
     animation: opacityHalfFadeIn;
     animation-duration: 2s;
 }
 
-#tournamentLogo {
+#mainScore {
     background-image: url("../../../imgs/Center.png");
     animation: opacityGradualFadeIn;
     animation-duration: 0.5s;

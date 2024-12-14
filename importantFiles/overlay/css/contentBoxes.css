@@ -1,64 +1,95 @@
 /* Position of the Left ScoreBox */
-#leftScoreBox {
-    top: 15px;
-    left: 330px;
+#player1ScoreBox {
+    top: 110px;
+    left: 790px;
 }
 
 /* Position of the Right ScoreBox */
-#rightScoreBox {
-    top: 15px;
-    left: 1570px;
+#player2ScoreBox {
+    top: 110px;
+    right: 795px;
 }
 
 /* width and height of the Left ScoreBox and Right ScoreBox */
 /* These should only be defined together if they are meant to be the same size */
 /* line-height should be the same px value as height */
-#leftScoreBox, #rightScoreBox {
-    width: 21px;
+#player1ScoreBox, #player2ScoreBox {
+    width: 64px;
     height: 54px;
     line-height: 54px;
 }
 
 /* Position of the Left NameBox */
-#leftNameBox {
-    top: 17px;
-    left: 401px;
+#player1NameBox {
+    top: 70px;
+    left: 160px;
 }
 
 /* Position of the Right NameBox */
-#rightNameBox {
-    top: 17px;
-    left: 999px;
+#player2NameBox {
+    top: 70px;
+    right: 165px;
 }
 
 /* width and height of the Left NameBox and Right NameBox */
 /* These should only be defined together if they are meant to be the same size */
  /* line-height should be the same px value as height */
-#leftNameBox, #rightNameBox {
-    width: 520px;
-    height: 49px;
+#player1NameBox, #player2NameBox {
+    width: 500px;
+    height: 65px;
     line-height: 49px;
 }
 
-/* Position of the RoundBox */
-#roundBox {
-    top: 67px;
-    left: 692px;
+/* Position of the player1StateName */
+#player1StateName {
+    top: 150px;
+    left: 330px;
 }
 
-/* Position of the ExtraBox */
-#extraBox {
-    top: 67px;
-    left: 998px;
+/* Position of the player2StateName */
+#player2StateName {
+    top: 150px;
+    right: 335px;
 }
 
-/* width and height of the RoundBox and ExtraBox */
+/* width and height of the player1StateName and player2StateName */
 /* These should only be defined together if they are meant to be the same size */
 /* line-height should be the same px value as height */
-#roundBox, #extraBox {
+#player1StateName, #player2StateName {
     width: 230px;
-    height: 25px;
-    line-height: 25px;
+    height: 30px;
+    line-height: 30px;
+}
+
+#player1SetBox {
+    top: 110px;
+    left: 690px;
+}
+
+/* Position of the Right ScoreBox */
+#player2SetBox {
+    top: 110px;
+    right: 695px;
+}
+
+/* width and height of the Left ScoreBox and Right ScoreBox */
+/* These should only be defined together if they are meant to be the same size */
+/* line-height should be the same px value as height */
+#player1SetBox, #player2SetBox {
+    width: 64px;
+    height: 54px;
+    line-height: 54px;
+}
+
+#boardNumberBox {
+    top: 80px;
+    left: 900px;
+}
+
+#boardNumberBox {
+    width: 115px;
+    height: 100px;
+    line-height: 100px;
 }
 
 /* Uncomment everything below this to debug the width, height and positions of all elements. */

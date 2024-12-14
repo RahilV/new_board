@@ -8,7 +8,7 @@ Experience in HTML and CSS is recommended if you want to make changes to the ove
 ---- Below /* divs to contain the background images */ defines the elements to apply the background images to
 ------ .scoreboardPart most importantly sets the height and width of the elements
 -------- should be the same size as the background images and the OBS canvas
------- #scoreboardLeft, #scoreboardMiddle, #scoreboardBottom, #scoreboardRight, #tournamentLogo are the individual background containers
+------ #player1Name, #player1State, #player2State, #player1Name, #mainScore are the individual background containers
 -------- These should only define the background image and the animation name and duration
 -------- Complex slide ("size" or "position") animations are unviable with the techniques used, it should be kept to fade ("opacity") animations
 ---- Below /* divs to contain text content */ defines the elements to insert the text into
