@@ -1,0 +1,44 @@
+[
+  {
+    "selector": "#player1NameText",
+    "suffix": ":before",
+    "property": "content",
+    "value": "BR",
+    "changed": true
+  },
+  {
+    "selector": "#player1ScoreText",
+    "suffix": ":before",
+    "property": "content",
+    "value": "0",
+    "changed": false
+  },
+  {
+    "selector": "#player2NameText",
+    "suffix": ":before",
+    "property": "content",
+    "value": "R",
+    "changed": true
+  },
+  {
+    "selector": "#player2ScoreText",
+    "suffix": ":before",
+    "property": "content",
+    "value": "0",
+    "changed": false
+  },
+  {
+    "selector": "#roundText",
+    "suffix": ":before",
+    "property": "content",
+    "value": "",
+    "changed": false
+  },
+  {
+    "selector": "#extraText",
+    "suffix": ":before",
+    "property": "content",
+    "value": "",
+    "changed": false
+  }
+]

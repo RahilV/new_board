@@ -1,0 +1,68 @@
+/* Position of the Left ScoreBox */
+#leftScoreBox {
+    top: 15px;
+    left: 330px;
+}
+
+/* Position of the Right ScoreBox */
+#rightScoreBox {
+    top: 15px;
+    left: 1570px;
+}
+
+/* width and height of the Left ScoreBox and Right ScoreBox */
+/* These should only be defined together if they are meant to be the same size */
+/* line-height should be the same px value as height */
+#leftScoreBox, #rightScoreBox {
+    width: 21px;
+    height: 54px;
+    line-height: 54px;
+}
+
+/* Position of the Left NameBox */
+#leftNameBox {
+    top: 17px;
+    left: 401px;
+}
+
+/* Position of the Right NameBox */
+#rightNameBox {
+    top: 17px;
+    left: 999px;
+}
+
+/* width and height of the Left NameBox and Right NameBox */
+/* These should only be defined together if they are meant to be the same size */
+ /* line-height should be the same px value as height */
+#leftNameBox, #rightNameBox {
+    width: 520px;
+    height: 49px;
+    line-height: 49px;
+}
+
+/* Position of the RoundBox */
+#roundBox {
+    top: 67px;
+    left: 692px;
+}
+
+/* Position of the ExtraBox */
+#extraBox {
+    top: 67px;
+    left: 998px;
+}
+
+/* width and height of the RoundBox and ExtraBox */
+/* These should only be defined together if they are meant to be the same size */
+/* line-height should be the same px value as height */
+#roundBox, #extraBox {
+    width: 230px;
+    height: 25px;
+    line-height: 25px;
+}
+
+/* Uncomment everything below this to debug the width, height and positions of all elements. */
+.contentBox {
+	background-color: blue;
+	opacity: 0.7;
+}

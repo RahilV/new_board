@@ -1,0 +1,106 @@
+/* TEXT */
+
+span {
+    color: #ffffff;
+    text-shadow: -2px -2px 0 #000000, 2px -2px 0 #000000, -2px 2px 0 #000000, 2px 2px 0 #000000, 2px 0px 0 #000000, -2px 0px 0 #000000, 0px 2px 0 #000000, 0px -2px 0 #000000;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* divs to contain the background images */
+
+/* width and height should be the same size as the background images */
+.scoreboardPart {
+    margin: 0;
+    padding: 0;
+    width: 1920px;
+    height: 1080px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+#scoreboardLeft {
+    background-image: url("../../../imgs/Left\ Title-box.png");
+    animation: opacityHalfFadeIn;
+    animation-duration: 2s;
+}
+#player1SetScore {
+    background-image: url("../../../imgs/Left-player-set.png");
+    animation: opacityHalfFadeIn;
+    animation-duration: 2s;
+}
+
+#scoreboardMiddle {
+    background-image: url("../../../imgs/Left-State-name.png");
+    animation: opacityGradualFadeIn;
+    animation-duration: 1s;
+    z-index: -1;
+}
+
+#scoreboardBottom {
+    background-image: url("../../../imgs/Right-State-name.png");
+    animation: opacityHalfFadeIn;
+    animation-duration: 3s;
+    z-index: -1;
+}
+
+#scoreboardRight {
+    background-image: url("../../../imgs/Right-Title-box.png");
+    animation: opacityHalfFadeIn;
+    animation-duration: 2s;
+}
+
+#tournamentLogo {
+    background-image: url("../../../imgs/Center.png");
+    animation: opacityGradualFadeIn;
+    animation-duration: 0.5s;
+}
+
+/* divs to contain text content */
+
+.contentBox {
+    margin: 0;
+    padding: 0;
+    position: fixed;
+    text-align: center;
+    align-items: center;
+    animation: opacityThreeQuarterFadeIn;
+    animation-duration: 4s;
+}
+
+/* ANIMATIONS */
+
+@keyframes opacityGradualFadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes opacityHalfFadeIn {
+    0% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes opacityThreeQuarterFadeIn {
+    0% {
+        opacity: 0;
+    }
+    75% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}

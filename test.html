@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Scoreboard Controller</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Gabarito:wght@500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="custom.css">
+</head>
+<body>
+    <div class="div">
+        <div class="div-2 topbar">
+            <div class="div-3">Dashboard</div>
+            <div class="parent-div">
+                <div class="div-63 end-match">END MATCH</div>
+            </div>
+            <br>
+            <div class="div-4">
+                <div class="div-5">
+                    <div class="div-6">
+                        <div class="div-7">Player 1 Name:</div>
+                        <div class="">
+                            <input type="text" class="div-8 form-control player_name_1" id="player_name_1">
+                        </div>
+                        <br>
+                        <div class="div-7">Player 1 Representing:</div>
+                        <div class="">
+                            <input type="text" class="div-8 form-control player_org_1" id="player_org_1">
+                        </div>
+                    </div>
+                    <div class="div-9">
+                        <div class="div-10">Player 2 Name:</div>
+                        <div class="">
+                            <input type="text" class="div-11 form-control player_name_2" id="player_name_2">
+                        </div>
+                        <br>
+                        <div class="div-7">Player 2 Representing:</div>
+                        <div class="">
+                            <input type="text" class="div-8 form-control player_org_2" id="player_org_2">
+                        </div>
+                    </div>
+                </div>
+                <div class="div-12">
+                    <div class="div-13">SET:</div>
+                    <div class="div-14">BOARD:</div>
+                </div>
+                <div class="div-15">
+                    <div class="input-set-sec">
+                        <select class="form-control div-16 input_set" id="input_set">
+                            <option value="0">0</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                        </select>
+                    </div>
+                    <div class="input-board-sec">
+                        <select class="form-control div-17 input_board" id="input_board">
+                            <option value="0">0</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="div-18">Announce Match Winner:</div>
+                <div class="div-19">
+                    <div class="input-for-match-winner">
+                        <select class="form-control div-20 winner_input" id="winner_input">
+                            <option value="">Select Player</option>
+                        </select>
+                    </div>
+                    <div class="div-21 annouce-match-winner" id="announce_winner">Announce Winner</div>
+                </div>
+                <div class="div-22">Announce Queen:</div>
+                <div class="div-23">
+                    <div class="input-for-queen-winner">
+                        <select class="form-control div-24 queen_input" id="queen_input">
+                            <option value="">Select Player</option>
+                        </select>
+                    </div>
+                    <div class="div-25 annouce-queen-winner" id="announce_queen">Announce Queen</div>
+                </div>
+                <div class="div-26">
+                    <div class="div-27 score_mark_1 parent_score" id="score_mark_1"></div>
+                    <div class="div-41 score_mark_2 parent_score" id="score_mark_2"></div>
+                </div>
+                <div class="div-55">
+                    <div class="div-56">
+                        <div class="div-59 next-board" id="next_board">NEXT BOARD</div>
+                        <div class="div-59 swap-player" id="swap_player">SWAP PLAYER</div>
+                    </div>
+                    <div class="div-60" id="adButtonsContainer">
+                        <div class="div-61 play_ad" id="play_ad">START ADs</div>
+                        <div class="div-62 pause_ad" id="pause_ad">STOP ADs</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="sticky-bottom">
+            <div class="info_banner hide">
+                <div class="ad hide">
+                    <div class="video-container">
+                        <div class="video-item">
+                            <video id="myVideo" class="custom-video" height="120" muted>
+                                <source src="" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                        </div>
+                    </div>
+                </div>
+                <div class="winner hide">
+                    <span>Congratulations! <span class="win-team" id="win_team"></span> Won The Match</span>
+                </div>
+                <div class="queen hide">
+                    <span class="team_name" id="queen_team"></span> Pocketed The Queen
+                </div>
+            </div>
+            <div class="display_score_board">
+                <div class="left-area player_1_section" id="player_1_section"></div>
+                <div class="center-area">
+                    <div class="current-set-status">
+                        <span class="set-span">SET</span>
+                        <span class="current_set" id="current_set">00</span>
+                    </div>
+                    <div class="current-board-status">
+                        <span class="current_board" id="current_board">00</span>
+                        <span class="set-board-span">CURRENT<br>BOARD</span>
+                    </div>
+                </div>
+                <div class="right-area player_2_section" id="player_2_section"></div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script>
+        const overallScoreBoard = {
+            player_name_1: '',
+            player_name_2: '',
+            player_org_1: '',
+            player_org_2: '',
+            selected_set: '',
+            selected_board: '',
+            announcement_win: '',
+            announcement_queen: '',
+            player_1: Array.from({ length: 3 }, () => ({
+                total_score: 0,
+                boards: Array.from({ length: 9 }, () => ({
+                    score: 0,
+                    isWinner: false,
+                    isQueen: false,
+                })),
+            })),
+            player_2: Array.from({ length: 3 }, () => ({
+                total_score: 0,
+                boards: Array.from({ length: 9 }, () => ({
+                    score: 0,
+                    isWinner: false,
+                    isQueen: false,
+                })),
+            })),
+        };
+
+        document.getElementById('swap_player').addEventListener('click', () => {
+            const leftArea = document.getElementById('player_1_section');
+            const rightArea = document.getElementById('player_2_section');
+
+            [leftArea.innerHTML, rightArea.innerHTML] = [rightArea.innerHTML, leftArea.innerHTML];
+        });
+
+        document.getElementById('announce_winner').addEventListener('click', () => {
+            const winner = document.getElementById('winner_input').value;
+            if (winner) {
+                document.getElementById('win_team').textContent = winner;
+                alert(`${winner} is the match winner!`);
+            }
+        });
+
+        document.getElementById('announce_queen').addEventListener('click', () => {
+            const queen = document.getElementById('queen_input').value;
+            if (queen) {
+                document.getElementById('queen_team').textContent = queen;
+                alert(`${queen} pocketed the queen!`);
+            }
+        });
+
+        document.getElementById('next_board').addEventListener('click', () => {
+            const currentSet = document.getElementById('input_set').value;
+            const currentBoard = document.getElementById('input_board').value;
+
+            alert(`Next board: Set ${currentSet}, Board ${currentBoard}`);
+        });
+    </script>
+</body>
+</html>
