@@ -24,75 +24,211 @@
 		<link id="contentFile" rel="stylesheet" type="text/css"></link>
 	</head>
 	<body>
-		<!-- divs to contain the background images -->
-		<div id="player1Name" class="scoreboardPart"></div>
-		<div id="player1State" class="scoreboardPart"></div>
+		<div class="scoreBoard">
+			<!-- divs to contain the background images -->
+			<div id="player1Name" class="scoreboardPart"></div>
+			<div id="player1State" class="scoreboardPart"></div>
 
-		<div id="player2State" class="scoreboardPart"></div>
-		<div id="player2Name" class="scoreboardPart"></div>
+			<div id="player2State" class="scoreboardPart"></div>
+			<div id="player2Name" class="scoreboardPart"></div>
 
-		<div id="mainScore" class="scoreboardPart"></div>
-		<div id="player1Score" class="scoreboardPart"></div>
-		<div id="player2Score" class="scoreboardPart"></div>
+			<div id="mainScore" class="scoreboardPart"></div>
+			<div id="player1Score" class="scoreboardPart"></div>
+			<div id="player2Score" class="scoreboardPart"></div>
 
-		<div id="player1Set" class="scoreboardPart"></div>
-		<div id="player2Set" class="scoreboardPart"></div>
+			<div id="player1Set" class="scoreboardPart"></div>
+			<div id="player2Set" class="scoreboardPart"></div>
 
-		<!-- divs to contain text content -->
-		<!-- spans that contain the text -->
-		<div class="contentBox" id="player1ScoreBox">
-			<span class="playerScoreText" id="player1ScoreText"></span>
-		</div>
-		<div class="contentBox" id="player1NameBox">
-			<span class="playerNameText" id="player1NameText"></span>
-		</div>
-		<div class="contentBox" id="player1SetBox">
-			<span class="playerNameText" id="player1SetBoxText"></span>
+			<!-- divs to contain text content -->
+			<!-- spans that contain the text -->
+			<div class="contentBox" id="player1ScoreBox">
+				<span class="playerScoreText" id="player1ScoreText"></span>
+			</div>
+			<div class="contentBox" id="player1NameBox">
+				<span class="playerNameText" id="player1NameText"></span>
+			</div>
+			<div class="contentBox" id="player1SetBox">
+				<span class="playerNameText" id="player1SetBoxText"></span>
+			</div>
+
+			<div class="contentBox" id="player2NameBox">
+				<span class="playerNameText" id="player2NameText"></span>
+			</div>
+			<div class="contentBox" id="player2ScoreBox">
+				<span class="playerScoreText" id="player2ScoreText"></span>
+			</div>
+			<div class="contentBox" id="player2SetBox">
+				<span class="playerNameText" id="player2SetBoxText"></span>
+			</div>
+
+			<div class="contentBox" id="player1StateName">
+				<span class="player1StateText" id="player1StateText"></span>
+			</div>
+
+			<div class="contentBox" id="player2StateName">
+				<span class="player2StateText" id="player2StateText"></span>
+			</div>
+
+			<div class="contentBox" id="boardNumberBox">
+				<span class="currentBoardText" id="currentBoardText"></span>
+			</div>
 		</div>
 
-		<div class="contentBox" id="player2NameBox">
-			<span class="playerNameText" id="player2NameText"></span>
-		</div>
-		<div class="contentBox" id="player2ScoreBox">
-			<span class="playerScoreText" id="player2ScoreText"></span>
-		</div>
-		<div class="contentBox" id="player2SetBox">
-			<span class="playerNameText" id="player2SetBoxText"></span>
+		<div id="inputSection">
+			<div id="player1Inputs" class="inputColumn">
+				<label for="player1NameInput">Player 1 Name:</label>
+				<input type="text" id="player1NameInput" placeholder="Enter Player 1 Name">
+
+				<label for="player1StateInput">Player 1 State:</label>
+				<input type="text" id="player1StateInput" placeholder="Enter Player 1 State">
+
+				<label for="player1SetScoreInput">Player 1 Set Score:</label>
+				<input type="number" id="player1SetScoreInput" placeholder="Enter Set Score (0-3)" min="0" max="3">
+
+				<label for="player1ScoreInput">Player 1 Score:</label>
+				<input type="number" id="player1ScoreInput" placeholder="Enter Player 1 Score">
+			</div>
+
+			<div id="player2Inputs" class="inputColumn">
+				<label for="player2NameInput">Player 2 Name:</label>
+				<input type="text" id="player2NameInput" placeholder="Enter Player 2 Name">
+
+				<label for="player2StateInput">Player 2 State:</label>
+				<input type="text" id="player2StateInput" placeholder="Enter Player 2 State">
+
+				<label for="player2SetScoreInput">Player 2 Set Score:</label>
+				<input type="number" id="player2SetScoreInput" placeholder="Enter Set Score (0-3)" min="0" max="3">
+
+				<label for="player2ScoreInput">Player 2 Score:</label>
+				<input type="number" id="player2ScoreInput" placeholder="Enter Player 2 Score">
+			</div>
+
+			 <!-- Current Board Input -->
+			 <div id="currentBoardInputs" class="inputColumn">
+				<label for="currentBoardInput">Current Board:</label>
+				<input type="number" id="currentBoardInput" placeholder="Enter Current Board (1-12)" min="1" max="12">
+			</div>
 		</div>
 
-		<div class="contentBox" id="player1StateName">
-			<span class="infoText" id="roundText"></span>
-		</div>
-
-		<div class="contentBox" id="player2StateName">
-			<span class="infoText" id="extra"></span>
-		</div>
-
-		<div class="contentBox" id="boardNumberBox">
-			<span class="infoText" id="boards"></span>
-		</div>
 
 		<!-- snackbar -->
 		<div class="snackbar" id="snackbar"></div>
 	</body>
-	
 	<script type="text/javascript">
-		var fittyElements = [
-			{ selector: ".playerNameText", minSize: 8, maxSize: 28, multiLine: false },
-			{ selector: ".playerScoreText", minSize: 8, maxSize: 36, multiLine: false },
-			{ selector: ".infoText", minSize: 8, maxSize: 18, multiLine: false }
-		];
 
-		// $(document).ready(function () {
-		// 	initOverlayManager(fittyElements);
-		// });
+		document.getElementById('player1SetBoxText').textContent = "00";
+		document.getElementById('player2SetBoxText').textContent = "00";
 
-		// $(window).on("beforeunload", function () {
-		// 	try {
-		// 		sendDisconnectingMessage();
-		// 	} catch (ex) {
-		// 		console.log(ex);
-		// 	}
-		// });
-	</script>
+		document.getElementById('player1ScoreText').textContent = "00";
+		document.getElementById('player2ScoreText').textContent = "00";
+
+        // Real-time update of Player 1's name
+        document.getElementById('player1NameInput').addEventListener('input', function(event) {
+            const nameInput = event.target.value;
+            document.getElementById('player1NameText').textContent = nameInput;
+        });
+
+		document.getElementById('player2NameInput').addEventListener('input', function(event) {
+            const nameInput = event.target.value;
+            document.getElementById('player2NameText').textContent = nameInput;
+        });
+
+		// Real-time updates for Player 1 and Player 2 State Names
+        document.getElementById('player1StateInput').addEventListener('input', function(event) {
+            const stateInput = event.target.value;
+            document.getElementById('player1StateText').textContent = stateInput;
+        });
+
+        document.getElementById('player2StateInput').addEventListener('input', function(event) {
+            const stateInput = event.target.value;
+            document.getElementById('player2StateText').textContent = stateInput;
+        });
+
+		// Real-time updates for Player 1 and Player 2 Set Scores with restrictions
+		document.getElementById('player1SetScoreInput').addEventListener('input', function(event) {
+			let setScore = event.target.value;
+
+			// Restrict input to a maximum value of 3
+			if (setScore > 3) {
+				setScore = 3;
+				event.target.value = setScore; // Update the input field
+			}
+
+			// Format the score to two digits
+			setScore = setScore.toString().padStart(2, '0');
+			document.getElementById('player1SetBoxText').textContent = setScore;
+		});
+
+		document.getElementById('player2SetScoreInput').addEventListener('input', function(event) {
+			let setScore = event.target.value;
+
+			// Restrict input to a maximum value of 3
+			if (setScore > 3) {
+				setScore = 3;
+				event.target.value = setScore; // Update the input field
+			}
+
+			// Format the score to two digits
+			setScore = setScore.toString().padStart(2, '0');
+			document.getElementById('player2SetBoxText').textContent = setScore;
+		});
+
+		// Real-time updates for Player 1 Score with double-digit formatting
+		document.getElementById('player1ScoreInput').addEventListener('input', function(event) {
+			let score = event.target.value;
+
+			// Ensure the score is within bounds
+			if (score < 0) {
+				score = 0;
+				event.target.value = score;
+			} else if (score > 99) {
+				score = 99;
+				event.target.value = score;
+			}
+
+			// Format the score as double digits
+			score = score.toString().padStart(2, '0');
+			document.getElementById('player1ScoreText').textContent = score;
+		});
+
+		// Real-time updates for Player 2 Score with double-digit formatting
+		document.getElementById('player2ScoreInput').addEventListener('input', function(event) {
+			let score = event.target.value;
+
+			// Ensure the score is within bounds
+			if (score < 0) {
+				score = 0;
+				event.target.value = score;
+			} else if (score > 99) {
+				score = 99;
+				event.target.value = score;
+			}
+
+			// Format the score as double digits
+			score = score.toString().padStart(2, '0');
+			document.getElementById('player2ScoreText').textContent = score;
+		});
+
+
+		// Real-time updates for the Current Board
+		document.getElementById('currentBoardInput').addEventListener('input', function(event) {
+			let board = event.target.value;
+
+			// Ensure the board number is within the range 1-12
+			if (board < 1) {
+				board = 1;
+				event.target.value = board;
+			} else if (board > 12) {
+				board = 12;
+				event.target.value = board;
+			}
+
+			// Format the board number as two digits
+			board = board.toString().padStart(2, '0');
+			document.getElementById('currentBoardText').textContent = board;
+		});
+
+
+
+    </script>
 </html>
