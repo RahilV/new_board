@@ -54,7 +54,7 @@
 
 // function updateContentReferenceTimestamp(timeout) {
 //     setTimeout(function () {
-//         $("link#contentFile").attr("href", `../importantFiles/shared/content.css?timestamp=${ new Date().getTime() }`);;
+//         $("link#contentFile").attr("href", `..importantFiles/shared/content.css?timestamp=${ new Date().getTime() }`);;
 //         resizeFittyElements();
 //     }, timeout);
 // }
