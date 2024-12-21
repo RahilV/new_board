@@ -107,20 +107,54 @@
 				<input type="number" id="player2ScoreInput" placeholder="Enter Player 2 Score">
 			</div>
 
-			 <!-- Current Board Input -->
-			 <div id="currentBoardInputs" class="inputColumn">
+			<!-- Current Board Input -->
+			<div id="currentBoardInputs" class="inputColumn">
 				<label for="currentBoardInput">Current Board:</label>
-				<input type="number" id="currentBoardInput" placeholder="Enter Current Board (1-12)" min="1" max="12">
+				<input type="number" id="currentBoardInput" placeholder="Enter Current Board (0-8)" min="0" max="8" value="0">
+				<br>
+				<div id="swapPlayersContainer" class="actionGroup">
+					<button id="swapPlayersButton">Swap Players</button>
+				</div>
 			</div>
-
-			<!-- Dropdown for Queen Pocketed -->
-			<div id="queenPocketedInputs" class="inputColumn">
-				<label for="queenPocketedDropdown">Select Player:</label>
-				<select id="queenPocketedDropdown">
-					<option value="player1">Player 1</option>
-					<option value="player2">Player 2</option>
-				</select>
-				<button id="queenPocketedButton">Announce</button>
+			<div id="currentBoardInputs" class="inputColumn">
+				<label for="queenPocketedDropdown">Select Player to pocket Queen:</label>
+				<div id="actionInputs" class="actionContainer">
+					<div id="queenPocketedInputs" class="actionGroup">
+						<select id="queenPocketedDropdown">
+							<option value="player1">Player 1</option>
+							<option value="player2">Player 2</option>
+						</select>
+						<button id="queenPocketedButton">Announce Queen</button>
+					</div>
+					<label for="winnerDropdown">Select Winner:</label>
+					<div id="winnerInputs" class="actionGroup">
+						<select id="winnerDropdown">
+							<option value="player1">Player 1</option>
+							<option value="player2">Player 2</option>
+						</select>
+						<button id="winnerButton">Announce Winner</button>
+					</div>
+				</div>
+			</div>
+			<div id="currentBoardInputs" class="inputColumn">
+				<label for="whiteSlamDropdown">Select White Slam:</label>
+				<div id="actionInputs" class="actionContainer">
+					<div id="whiteSlamInputs" class="actionGroup">
+						<select id="whiteSlamDropdown">
+							<option value="player1">Player 1</option>
+							<option value="player2">Player 2</option>
+						</select>
+						<button id="whiteSlamButton">Announce White Slam</button>
+					</div>
+					<label for="blackSlamDropdown">Select Black Slam:</label>
+					<div id="blackSlamInputs" class="actionGroup">
+						<select id="blackSlamDropdown">
+							<option value="player1">Player 1</option>
+							<option value="player2">Player 2</option>
+						</select>
+						<button id="blackSlamButton">Announce Black Slam</button>
+					</div>
+				</div>
 			</div>
 		</div>
 
@@ -230,12 +264,12 @@
 		document.getElementById('currentBoardInput').addEventListener('input', function(event) {
 			let board = event.target.value;
 
-			// Ensure the board number is within the range 1-12
-			if (board < 1) {
-				board = 1;
+			// Ensure the board number is within the range 0-8
+			if (board < 0) {
+				board = 0;
 				event.target.value = board;
-			} else if (board > 12) {
-				board = 12;
+			} else if (board > 8) {
+				board = 8;
 				event.target.value = board;
 			}
 
@@ -256,40 +290,88 @@
 			document.querySelector('#queenPocketedDropdown option[value="player2"]').textContent = player2Name;
 		});
 
-		// Announce Queen Pocketed
+		// Announce Pocketed Queen
 		document.getElementById('queenPocketedButton').addEventListener('click', function () {
-			const dropdown = document.getElementById('queenPocketedDropdown');
+			announce('queenPocketedDropdown', 'pocketed the queen');
+		});
+
+		// Announce Winner
+		document.getElementById('winnerButton').addEventListener('click', function () {
+			announce('winnerDropdown', 'wins the game! 🎉');
+		});
+
+		// Announce White Slam
+		document.getElementById('whiteSlamButton').addEventListener('click', function () {
+			announce('whiteSlamDropdown', 'completed a White Slam!');
+		});
+
+		// Announce Black Slam
+		document.getElementById('blackSlamButton').addEventListener('click', function () {
+			announce('blackSlamDropdown', 'completed a Black Slam!');
+		});
+
+		// Utility function to handle announcements
+		function announce(dropdownId, action) {
+			const dropdown = document.getElementById(dropdownId);
 			const selectedPlayer = dropdown.value;
 			const player1Name = document.getElementById('player1NameInput').value || 'Player 1';
 			const player2Name = document.getElementById('player2NameInput').value || 'Player 2';
 
-			let message = '';
+			const message = selectedPlayer === 'player1'
+				? `${player1Name} ${action}`
+				: `${player2Name} ${action}`;
 
-			// Determine the message
-			if (selectedPlayer === 'player1') {
-				message = `${player1Name} pocketed the queen`;
-			} else if (selectedPlayer === 'player2') {
-				message = `${player2Name} pocketed the queen`;
-			}
+			showMessage(message);
+		}
 
-			// Display the message
+		// Utility function to display the message
+		function showMessage(message) {
 			const messageBox = document.getElementById('queenPocketedMessage');
 			const messageText = document.getElementById('queenPocketedText');
 			messageText.textContent = message;
 
-			// Add the 'show' class to make the div visible
+			// Add 'show' class to make the message visible
 			messageBox.classList.add('show');
 
-			// Remove 'show' after 7.5 seconds
-			setTimeout(() => {
-				messageBox.classList.remove('show'); // Trigger fade-out
+			// Clear any existing timeout
+			if (messageBox.timeout) {
+				clearTimeout(messageBox.timeout);
+			}
+
+			// Remove 'show' class after 7.5 seconds
+			messageBox.timeout = setTimeout(() => {
+				messageBox.classList.remove('show');
 			}, 7500);
+		}
+		
+		// Swap Players Functionality (Text Only)
+		document.getElementById('swapPlayersButton').addEventListener('click', function () {
+			// Get scoreboard elements for text
+			const player1NameText = document.getElementById('player1NameText');
+			const player2NameText = document.getElementById('player2NameText');
+			const player1StateText = document.getElementById('player1StateText');
+			const player2StateText = document.getElementById('player2StateText');
+			const player1SetBoxText = document.getElementById('player1SetBoxText');
+			const player2SetBoxText = document.getElementById('player2SetBoxText');
+			const player1ScoreText = document.getElementById('player1ScoreText');
+			const player2ScoreText = document.getElementById('player2ScoreText');
+
+			// Swap names
+			[player1NameText.textContent, player2NameText.textContent] =
+				[player2NameText.textContent, player1NameText.textContent];
+
+			// Swap states
+			[player1StateText.textContent, player2StateText.textContent] =
+				[player2StateText.textContent, player1StateText.textContent];
+
+			// Swap set scores
+			[player1SetBoxText.textContent, player2SetBoxText.textContent] =
+				[player2SetBoxText.textContent, player1SetBoxText.textContent];
+
+			// Swap total scores
+			[player1ScoreText.textContent, player2ScoreText.textContent] =
+				[player2ScoreText.textContent, player1ScoreText.textContent];
 		});
-
-
-
-
-
 
 
     </script>
