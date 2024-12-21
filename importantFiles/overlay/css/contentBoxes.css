@@ -1,12 +1,12 @@
 /* Position of the Left ScoreBox */
 #player1ScoreBox {
-    top: 110px;
+    top: 190px;
     left: 790px;
 }
 
 /* Position of the Right ScoreBox */
 #player2ScoreBox {
-    top: 110px;
+    top: 190px;
     right: 795px;
 }
 
@@ -21,13 +21,13 @@
 
 /* Position of the Left NameBox */
 #player1NameBox {
-    top: 70px;
+    top: 150px;
     left: 160px;
 }
 
 /* Position of the Right NameBox */
 #player2NameBox {
-    top: 70px;
+    top: 150px;
     right: 165px;
 }
 
@@ -42,13 +42,13 @@
 
 /* Position of the player1StateName */
 #player1StateName {
-    top: 150px;
+    top: 230px;
     left: 330px;
 }
 
 /* Position of the player2StateName */
 #player2StateName {
-    top: 150px;
+    top: 230px;
     right: 335px;
 }
 
@@ -62,13 +62,13 @@
 }
 
 #player1SetBox {
-    top: 110px;
+    top: 190px;
     left: 690px;
 }
 
 /* Position of the Right ScoreBox */
 #player2SetBox {
-    top: 110px;
+    top: 190px;
     right: 695px;
 }
 
@@ -82,7 +82,7 @@
 }
 
 #boardNumberBox {
-    top: 80px;
+    top: 160px;
     left: 900px;
 }
 

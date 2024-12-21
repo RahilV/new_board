@@ -12,8 +12,7 @@
 
 		<!-- Custom font links here -->
 		<link rel="preconnect" href="https://fonts.gstatic.com">
-		<link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@700&display=swap" rel="stylesheet">
-		
+		<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
 		<link rel="stylesheet" type="text/css" href="importantFiles/overlay/css/styles.css"></link>
 		<link rel="stylesheet" type="text/css" href="importantFiles/overlay/css/font.css"></link>
 		<link rel="stylesheet" type="text/css" href="importantFiles/overlay/css/contentBoxes.css"></link>
@@ -25,6 +24,11 @@
 	</head>
 	<body>
 		<div class="scoreBoard">
+			<!-- Div to display the message -->
+			<div id="queenPocketedMessage" class="contentBox">
+				<span id="queenPocketedText"></span>
+			</div>
+
 			<!-- divs to contain the background images -->
 			<div id="player1Name" class="scoreboardPart"></div>
 			<div id="player1State" class="scoreboardPart"></div>
@@ -108,6 +112,16 @@
 				<label for="currentBoardInput">Current Board:</label>
 				<input type="number" id="currentBoardInput" placeholder="Enter Current Board (1-12)" min="1" max="12">
 			</div>
+
+			<!-- Dropdown for Queen Pocketed -->
+			<div id="queenPocketedInputs" class="inputColumn">
+				<label for="queenPocketedDropdown">Select Player:</label>
+				<select id="queenPocketedDropdown">
+					<option value="player1">Player 1</option>
+					<option value="player2">Player 2</option>
+				</select>
+				<button id="queenPocketedButton">Announce</button>
+			</div>
 		</div>
 
 
@@ -121,6 +135,8 @@
 
 		document.getElementById('player1ScoreText').textContent = "00";
 		document.getElementById('player2ScoreText').textContent = "00";
+
+		document.getElementById('currentBoardText').textContent = "00";
 
         // Real-time update of Player 1's name
         document.getElementById('player1NameInput').addEventListener('input', function(event) {
@@ -227,6 +243,52 @@
 			board = board.toString().padStart(2, '0');
 			document.getElementById('currentBoardText').textContent = board;
 		});
+
+		// Update the dropdown options dynamically based on Player 1 and Player 2 names
+		document.getElementById('player1NameInput').addEventListener('input', function (event) {
+			const player1Name = event.target.value || 'Player 1'; // Default to "Player 1" if input is empty
+			console.log(player1Name);
+			document.querySelector('#queenPocketedDropdown option[value="player1"]').textContent = player1Name;
+		});
+
+		document.getElementById('player2NameInput').addEventListener('input', function (event) {
+			const player2Name = event.target.value || 'Player 2'; // Default to "Player 2" if input is empty
+			document.querySelector('#queenPocketedDropdown option[value="player2"]').textContent = player2Name;
+		});
+
+		// Announce Queen Pocketed
+		document.getElementById('queenPocketedButton').addEventListener('click', function () {
+			const dropdown = document.getElementById('queenPocketedDropdown');
+			const selectedPlayer = dropdown.value;
+			const player1Name = document.getElementById('player1NameInput').value || 'Player 1';
+			const player2Name = document.getElementById('player2NameInput').value || 'Player 2';
+
+			let message = '';
+
+			// Determine the message
+			if (selectedPlayer === 'player1') {
+				message = `${player1Name} pocketed the queen`;
+			} else if (selectedPlayer === 'player2') {
+				message = `${player2Name} pocketed the queen`;
+			}
+
+			// Display the message
+			const messageBox = document.getElementById('queenPocketedMessage');
+			const messageText = document.getElementById('queenPocketedText');
+			messageText.textContent = message;
+
+			// Add the 'show' class to make the div visible
+			messageBox.classList.add('show');
+
+			// Remove 'show' after 7.5 seconds
+			setTimeout(() => {
+				messageBox.classList.remove('show'); // Trigger fade-out
+			}, 7500);
+		});
+
+
+
+
 
 
 
