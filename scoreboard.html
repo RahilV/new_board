@@ -48,16 +48,28 @@
 			<div class="contentBox" id="player1ScoreBox">
 				<span class="playerScoreText" id="player1ScoreText"></span>
 			</div>
+			<!-- For Player 1 -->
 			<div class="contentBox" id="player1NameBox">
-				<span class="playerNameText" id="player1NameText"></span>
+				<span class="playerNameContainer">
+					<img id="player1QueenIcon" src="/imgs/queen.png" alt="Queen Icon" class="queenIcon" style="display: none;">
+					<span class="playerNameText" id="player1NameText"></span>
+				</span>
 			</div>
+
+			<!-- For Player 2 -->
+			<div class="contentBox" id="player2NameBox">
+				<span class="playerNameContainer">
+					<img id="player2QueenIcon" src="/imgs/queen.png" alt="Queen Icon" class="queenIcon" style="display: none;">
+					<span class="playerNameText" id="player2NameText"></span>
+				</span>
+			</div>
+
+
 			<div class="contentBox" id="player1SetBox">
 				<span class="playerNameText" id="player1SetBoxText"></span>
 			</div>
 
-			<div class="contentBox" id="player2NameBox">
-				<span class="playerNameText" id="player2NameText"></span>
-			</div>
+
 			<div class="contentBox" id="player2ScoreBox">
 				<span class="playerScoreText" id="player2ScoreText"></span>
 			</div>
@@ -77,7 +89,7 @@
 				<span class="currentBoardText" id="currentBoardText"></span>
 			</div>
 		</div>
-
+		
 		<div id="inputSection">
 			<div id="player1Inputs" class="inputColumn">
 				<label for="player1NameInput">Player 1 Name:</label>
@@ -115,7 +127,26 @@
 				<div id="swapPlayersContainer" class="actionGroup">
 					<button id="swapPlayersButton">Swap Players</button>
 				</div>
+				<!-- Add Disable Inputs Checkbox -->
+				<div class="checkboxContainer">
+					<label for="disableInputsCheckbox">
+						<input type="checkbox" id="disableInputsCheckbox">
+						Disable Player Name and State Inputs
+					</label>
+				</div>
+
+				<div class="activePlayerContainer">
+					<label for="activePlayer1">
+						<input type="checkbox" id="activePlayer1" class="activePlayerCheckbox">
+						Highlight Player 1
+					</label>
+					<label for="activePlayer2">
+						<input type="checkbox" id="activePlayer2" class="activePlayerCheckbox">
+						Highlight Player 2
+					</label>
+				</div>
 			</div>
+
 			<div id="currentBoardInputs" class="inputColumn">
 				<label for="queenPocketedDropdown">Select Player to pocket Queen:</label>
 				<div id="actionInputs" class="actionContainer">
@@ -158,7 +189,6 @@
 			</div>
 		</div>
 
-
 		<!-- snackbar -->
 		<div class="snackbar" id="snackbar"></div>
 	</body>
@@ -176,22 +206,26 @@
         document.getElementById('player1NameInput').addEventListener('input', function(event) {
             const nameInput = event.target.value;
             document.getElementById('player1NameText').textContent = nameInput;
+			updateLabels();
         });
 
 		document.getElementById('player2NameInput').addEventListener('input', function(event) {
             const nameInput = event.target.value;
             document.getElementById('player2NameText').textContent = nameInput;
+			updateLabels();
         });
 
 		// Real-time updates for Player 1 and Player 2 State Names
         document.getElementById('player1StateInput').addEventListener('input', function(event) {
             const stateInput = event.target.value;
             document.getElementById('player1StateText').textContent = stateInput;
+			updateLabels();
         });
 
         document.getElementById('player2StateInput').addEventListener('input', function(event) {
             const stateInput = event.target.value;
             document.getElementById('player2StateText').textContent = stateInput;
+			updateLabels();
         });
 
 		// Real-time updates for Player 1 and Player 2 Set Scores with restrictions
@@ -276,6 +310,10 @@
 			// Format the board number as two digits
 			board = board.toString().padStart(2, '0');
 			document.getElementById('currentBoardText').textContent = board;
+
+			// Hide the queen icons for both players when the board is updated
+			document.getElementById('player1QueenIcon').style.display = 'none';
+    		document.getElementById('player2QueenIcon').style.display = 'none';
 		});
 
 		// Update the dropdown options dynamically based on Player 1 and Player 2 names
@@ -302,8 +340,53 @@
 
 		// Announce Pocketed Queen
 		document.getElementById('queenPocketedButton').addEventListener('click', function () {
-			announce('queenPocketedDropdown', 'pocketed the queen');
+			// Hide the queen icons for both players when the board is updated
+			document.getElementById('player1QueenIcon').style.display = 'none';
+    		document.getElementById('player2QueenIcon').style.display = 'none';
+			const dropdown = document.getElementById('queenPocketedDropdown');
+			const selectedPlayer = dropdown.value;
+
+			let iconElement = null;
+
+			if (selectedPlayer === 'player1') {
+				iconElement = document.getElementById('player1QueenIcon');
+			} else if (selectedPlayer === 'player2') {
+				iconElement = document.getElementById('player2QueenIcon');
+			}
+
+			// Display the queen icon for the selected player
+			if (iconElement) {
+				iconElement.style.display = 'inline'; // Ensure the icon is visible
+			}
+
+			// Show the announcement message
+			const playerName = selectedPlayer === 'player1'
+				? document.getElementById('player1NameInput').value || 'Player 1'
+				: document.getElementById('player2NameInput').value || 'Player 2';
+
+			showMessage(`${playerName} pocketed the queen`);
 		});
+
+
+		// Utility function to display the message
+		function showMessage(message) {
+			const messageBox = document.getElementById('queenPocketedMessage');
+			const messageText = document.getElementById('queenPocketedText');
+			messageText.textContent = message;
+
+			// Add 'show' class to make the message visible
+			messageBox.classList.add('show');
+
+			// Clear any existing timeout
+			if (messageBox.timeout) {
+				clearTimeout(messageBox.timeout);
+			}
+
+			// Remove 'show' class after 7.5 seconds
+			messageBox.timeout = setTimeout(() => {
+				messageBox.classList.remove('show');
+			}, 3000);
+		}
 
 		// Announce Winner
 		document.getElementById('winnerButton').addEventListener('click', function () {
@@ -366,37 +449,123 @@
 			// Remove 'show' class after 7.5 seconds
 			messageBox.timeout = setTimeout(() => {
 				messageBox.classList.remove('show');
-			}, 7500);
+			}, 3000);
 		}
-		
-		// Swap Players Functionality (Text Only)
-		document.getElementById('swapPlayersButton').addEventListener('click', function () {
-			// Get scoreboard elements for text
-			const player1NameText = document.getElementById('player1NameText');
-			const player2NameText = document.getElementById('player2NameText');
-			const player1StateText = document.getElementById('player1StateText');
-			const player2StateText = document.getElementById('player2StateText');
-			const player1SetBoxText = document.getElementById('player1SetBoxText');
-			const player2SetBoxText = document.getElementById('player2SetBoxText');
-			const player1ScoreText = document.getElementById('player1ScoreText');
-			const player2ScoreText = document.getElementById('player2ScoreText');
 
-			// Swap names
-			[player1NameText.textContent, player2NameText.textContent] =
-				[player2NameText.textContent, player1NameText.textContent];
+		// Swap Players Functionality
+	document.getElementById('swapPlayersButton').addEventListener('click', function () {
+		// Get scoreboard elements
+		const player1NameText = document.getElementById('player1NameText');
+		const player2NameText = document.getElementById('player2NameText');
+		const player1StateText = document.getElementById('player1StateText');
+		const player2StateText = document.getElementById('player2StateText');
+		const player1SetBoxText = document.getElementById('player1SetBoxText');
+		const player2SetBoxText = document.getElementById('player2SetBoxText');
+		const player1ScoreText = document.getElementById('player1ScoreText');
+		const player2ScoreText = document.getElementById('player2ScoreText');
 
-			// Swap states
-			[player1StateText.textContent, player2StateText.textContent] =
-				[player2StateText.textContent, player1StateText.textContent];
+		// Get input elements
+		const player1NameInput = document.getElementById('player1NameInput');
+		const player2NameInput = document.getElementById('player2NameInput');
+		const player1StateInput = document.getElementById('player1StateInput');
+		const player2StateInput = document.getElementById('player2StateInput');
+		const player1SetScoreInput = document.getElementById('player1SetScoreInput');
+		const player2SetScoreInput = document.getElementById('player2SetScoreInput');
+		const player1ScoreInput = document.getElementById('player1ScoreInput');
+		const player2ScoreInput = document.getElementById('player2ScoreInput');
 
-			// Swap set scores
-			[player1SetBoxText.textContent, player2SetBoxText.textContent] =
-				[player2SetBoxText.textContent, player1SetBoxText.textContent];
+		// Swap text content for names, states, set scores, and total scores (scoreboard)
+		[player1NameText.textContent, player2NameText.textContent] = [player2NameText.textContent, player1NameText.textContent];
+		[player1StateText.textContent, player2StateText.textContent] = [player2StateText.textContent, player1StateText.textContent];
+		[player1SetBoxText.textContent, player2SetBoxText.textContent] = [player2SetBoxText.textContent, player1SetBoxText.textContent];
+		[player1ScoreText.textContent, player2ScoreText.textContent] = [player2ScoreText.textContent, player1ScoreText.textContent];
 
-			// Swap total scores
-			[player1ScoreText.textContent, player2ScoreText.textContent] =
-				[player2ScoreText.textContent, player1ScoreText.textContent];
+		// Swap values for the text boxes (inputs)
+		[player1SetScoreInput.value, player2SetScoreInput.value] = [player2SetScoreInput.value, player1SetScoreInput.value];
+		[player1ScoreInput.value, player2ScoreInput.value] = [player2ScoreInput.value, player1ScoreInput.value];
+
+		// Update labels after swapping
+		updateLabels();
+	});
+
+	// Update labels dynamically based on the current scoreboard text
+	function updateLabels() {
+		const player1Name = document.getElementById('player1NameText').textContent || 'Player 1';
+		const player2Name = document.getElementById('player2NameText').textContent || 'Player 2';
+
+		const player1SetScoreLabel = document.querySelector('label[for="player1SetScoreInput"]');
+		const player2SetScoreLabel = document.querySelector('label[for="player2SetScoreInput"]');
+		const player1ScoreLabel = document.querySelector('label[for="player1ScoreInput"]');
+		const player2ScoreLabel = document.querySelector('label[for="player2ScoreInput"]');
+
+		// Update labels to include the swapped player names
+		player1SetScoreLabel.textContent = `${player1Name} Set Score`;
+		player2SetScoreLabel.textContent = `${player2Name} Set Score`;
+
+		player1ScoreLabel.textContent = `${player1Name} Score`;
+		player2ScoreLabel.textContent = `${player2Name} Score`;
+	}
+
+	// Initialize labels on page load
+	updateLabels();
+
+	// Get the checkbox and player inputs
+	const disableInputsCheckbox = document.getElementById('disableInputsCheckbox');
+	const player1NameInput = document.getElementById('player1NameInput');
+	const player2NameInput = document.getElementById('player2NameInput');
+	const player1StateInput = document.getElementById('player1StateInput');
+	const player2StateInput = document.getElementById('player2StateInput');
+
+	// Add event listener to the checkbox
+	disableInputsCheckbox.addEventListener('change', function () {
+		const isDisabled = disableInputsCheckbox.checked; // Check the state of the checkbox
+
+		// Enable or disable the inputs based on the checkbox state
+		player1NameInput.disabled = isDisabled;
+		player2NameInput.disabled = isDisabled;
+		player1StateInput.disabled = isDisabled;
+		player2StateInput.disabled = isDisabled;
+
+		// Optionally, apply styling to indicate the inputs are disabled
+		const inputs = [player1NameInput, player2NameInput, player1StateInput, player2StateInput];
+		inputs.forEach(input => {
+			if (isDisabled) {
+				input.style.backgroundColor = '#e0e0e0'; // Light gray background
+				input.style.cursor = 'not-allowed'; // Show "not allowed" cursor
+			} else {
+				input.style.backgroundColor = ''; // Reset background color
+				input.style.cursor = ''; // Reset cursor
+			}
 		});
+	});
+
+	// Get elements for active player highlighting
+	const activePlayer1Checkbox = document.getElementById('activePlayer1');
+	const activePlayer2Checkbox = document.getElementById('activePlayer2');
+	const player1NameText = document.getElementById('player1NameText');
+	const player2NameText = document.getElementById('player2NameText');
+
+	// Add event listeners to checkboxes
+	activePlayer1Checkbox.addEventListener('change', function () {
+		if (activePlayer1Checkbox.checked) {
+			activePlayer2Checkbox.checked = false; // Uncheck Player 2 checkbox
+			player1NameText.classList.add('active'); // Highlight Player 1 text
+			player2NameText.classList.remove('active'); // Remove highlight from Player 2
+		} else {
+			player1NameText.classList.remove('active'); // Remove highlight if unchecked
+		}
+	});
+
+	activePlayer2Checkbox.addEventListener('change', function () {
+		if (activePlayer2Checkbox.checked) {
+			activePlayer1Checkbox.checked = false; // Uncheck Player 1 checkbox
+			player2NameText.classList.add('active'); // Highlight Player 2 text
+			player1NameText.classList.remove('active'); // Remove highlight from Player 1
+		} else {
+			player2NameText.classList.remove('active'); // Remove highlight if unchecked
+		}
+	});
+
 
 
     </script>
