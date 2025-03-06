@@ -384,7 +384,7 @@ input[type="number"]::-webkit-outer-spin-button {
     cursor: pointer;
 }
 
-.playerNameText.active {
+.playerNameText .active {
     color: #44ff00; /* Highlight color for active player */
     font-size: 40px; /* Slightly larger font for emphasis */
     text-shadow: 0px 0px 5px #ffcc00; /* Glowing effect */
@@ -405,5 +405,38 @@ input[type="number"]::-webkit-outer-spin-button {
     content: url("../../../queen.png"); /* Set the image source here */
 }
 
+#player2playing {
+    position: fixed;
+    top: 145px;
+    right: 35px;
+    background-color: red;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 5px 10px;
+    border-radius: 5px;
+    text-transform: uppercase;
+    animation: smoothBlink 1.5s infinite ease-in-out;
+}
+#player1playing {
+    position: fixed;
+    top: 145px;
+    left: 35px;
+    background-color: red;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 5px 10px;
+    border-radius: 5px;
+    text-transform: uppercase;
+    animation: smoothBlink 1.5s infinite ease-in-out;
+    font-family: 'Poppins', sans-serif;
+}
+
+@keyframes smoothBlink {
+    0% { opacity: 1; }
+    50% { opacity: 0.0; }
+    100% { opacity: 1; }
+}
 
 

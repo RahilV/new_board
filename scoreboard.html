@@ -46,6 +46,7 @@
 			<!-- divs to contain text content -->
 			<!-- spans that contain the text -->
 			<div class="contentBox" id="player1ScoreBox">
+				<div id="player1playing" hidden>PLAYING</div>
 				<span class="playerScoreText" id="player1ScoreText"></span>
 			</div>
 			<!-- For Player 1 -->
@@ -71,6 +72,7 @@
 
 
 			<div class="contentBox" id="player2ScoreBox">
+				<div id="player2playing" hidden>PLAYING</div>
 				<span class="playerScoreText" id="player2ScoreText"></span>
 			</div>
 			<div class="contentBox" id="player2SetBox">
@@ -539,32 +541,33 @@
 		});
 	});
 
-	// Get elements for active player highlighting
-	const activePlayer1Checkbox = document.getElementById('activePlayer1');
-	const activePlayer2Checkbox = document.getElementById('activePlayer2');
-	const player1NameText = document.getElementById('player1NameText');
-	const player2NameText = document.getElementById('player2NameText');
+	// Get references to elements
+	const activePlayer1Checkbox = document.getElementById("activePlayer1");
+	const activePlayer2Checkbox = document.getElementById("activePlayer2");
+	const player1playing = document.getElementById("player1playing");
+	const player2playing = document.getElementById("player2playing");
 
 	// Add event listeners to checkboxes
-	activePlayer1Checkbox.addEventListener('change', function () {
-		if (activePlayer1Checkbox.checked) {
+	activePlayer1Checkbox.addEventListener("change", function () {
+		if (this.checked) {
 			activePlayer2Checkbox.checked = false; // Uncheck Player 2 checkbox
-			player1NameText.classList.add('active'); // Highlight Player 1 text
-			player2NameText.classList.remove('active'); // Remove highlight from Player 2
+			player1playing.hidden = false; // Show Player 1 text
+			player2playing.hidden = true;  // Hide Player 2 text
 		} else {
-			player1NameText.classList.remove('active'); // Remove highlight if unchecked
+			player1playing.hidden = true; // Hide Player 1 text if unchecked
 		}
 	});
 
-	activePlayer2Checkbox.addEventListener('change', function () {
-		if (activePlayer2Checkbox.checked) {
+	activePlayer2Checkbox.addEventListener("change", function () {
+		if (this.checked) {
 			activePlayer1Checkbox.checked = false; // Uncheck Player 1 checkbox
-			player2NameText.classList.add('active'); // Highlight Player 2 text
-			player1NameText.classList.remove('active'); // Remove highlight from Player 1
+			player2playing.hidden = false; // Show Player 2 text
+			player1playing.hidden = true;  // Hide Player 1 text
 		} else {
-			player2NameText.classList.remove('active'); // Remove highlight if unchecked
+			player2playing.hidden = true; // Hide Player 2 text if unchecked
 		}
 	});
+
 
 
 
