@@ -402,7 +402,7 @@ input[type="number"]::-webkit-outer-spin-button {
     width: 20px; /* Adjust size as needed */
     height: 20px;
     transition: opacity 0.3s ease-in-out; /* Smooth transition for appearance */
-    content: url("/imgs/queen.png"); /* Set the image source here */
+    content: url("../../../queen.png"); /* Set the image source here */
 }
 
 
