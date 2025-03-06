@@ -429,7 +429,7 @@ input[type="number"]::-webkit-outer-spin-button {
     padding: 5px 10px;
     border-radius: 5px;
     text-transform: uppercase;
-    animation: smoothBlink 1.5s infinite ease-in-out;
+    animation: smoothBlink 3s infinite ease-in-out;
     font-family: 'Poppins', sans-serif;
 }
 
