@@ -1,0 +1,459 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <!-- Include necessary JS libraries -->
+    <script type="text/javascript" src="importantFiles/overlay/js/jquery.3.5.1.min.js"></script>
+    <script type="text/javascript" src="importantFiles/overlay/js/fitty.js"></script>
+    <script type="text/javascript" src="importantFiles/overlay/js/constants.js"></script>
+    <script type="text/javascript" src="importantFiles/overlay/js/variables.js"></script>
+    <script type="text/javascript" src="importantFiles/overlay/js/helper.js"></script>
+    <script type="text/javascript" src="importantFiles/overlay/js/overlayManager.js"></script>
+
+    <!-- Custom font and stylesheet links -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="importantFiles/overlay/css/styles2.css">
+    <link rel="stylesheet" type="text/css" href="importantFiles/overlay/css/font.css">
+    <link rel="stylesheet" type="text/css" href="importantFiles/overlay/css/contentBoxes.css">
+    <link rel="stylesheet" type="text/css" href="importantFiles/overlay/css/queu.css">
+    <link rel="stylesheet" type="text/css" href="importantFiles/overlay/css/snackbar.css">
+    <!-- Your custom CSS -->
+    <link rel="stylesheet" type="text/css" href="custom.css">
+    
+    <style id="contentCSS" type="text/css"></style>
+    <link id="contentFile" rel="stylesheet" type="text/css">
+    
+    <title>Carrom Score</title>
+  </head>
+  <body>
+    <!-- SCOREBOARD (Final Display – Unchanged) -->
+    <div class="scoreBoard">
+      <!-- Announcement Message -->
+      <div id="queenPocketedMessage" class="contentBox">
+        <span id="queenPocketedText"></span>
+      </div>
+      
+      <!-- Background images and text containers -->
+      <div id="player1Name" class="scoreboardPart"></div>
+      <div id="player1State" class="scoreboardPart"></div>
+      
+      <div id="player2State" class="scoreboardPart"></div>
+      <div id="player2Name" class="scoreboardPart"></div>
+      
+      <div id="mainScore" class="scoreboardPart"></div>
+      <div id="player1Score" class="scoreboardPart"></div>
+      <div id="player2Score" class="scoreboardPart"></div>
+      
+      <div id="player1Set" class="scoreboardPart"></div>
+      <div id="player2Set" class="scoreboardPart"></div>
+      
+      <!-- Text content boxes -->
+      <div class="contentBox" id="player1ScoreBox">
+        <div id="player1playing" hidden>PLAYING</div>
+        <span class="playerScoreText" id="player1ScoreText"></span>
+      </div>
+      <!-- For Player 1 -->
+      <div class="contentBox" id="player1NameBox">
+        <span class="playerNameContainer">
+          <img id="player1QueenIcon" src="queen.png" alt="Queen Icon" class="queenIcon" style="display: none;">
+          <span class="playerNameText" id="player1NameText"></span>
+        </span>
+      </div>
+      
+      <!-- For Player 2 -->
+      <div class="contentBox" id="player2NameBox">
+        <span class="playerNameContainer">
+          <img id="player2QueenIcon" src="queen.png" alt="Queen Icon" class="queenIcon" style="display: none;">
+          <span class="playerNameText" id="player2NameText"></span>
+        </span>
+      </div>
+      
+      <div class="contentBox" id="player1SetBox">
+        <span class="playerNameText" id="player1SetBoxText"></span>
+      </div>
+      
+      <div class="contentBox" id="player2ScoreBox">
+        <div id="player2playing" hidden>PLAYING</div>
+        <span class="playerScoreText" id="player2ScoreText"></span>
+      </div>
+      <div class="contentBox" id="player2SetBox">
+        <span class="playerNameText" id="player2SetBoxText"></span>
+      </div>
+      
+      <div class="contentBox" id="player1StateName">
+        <span class="player1StateText" id="player1StateText"></span>
+      </div>
+      
+      <div class="contentBox" id="player2StateName">
+        <span class="player2StateText" id="player2StateText"></span>
+      </div>
+      
+      <div class="contentBox" id="boardNumberBox">
+        <span class="currentBoardText" id="currentBoardText"></span>
+      </div>
+    </div>
+    
+    <!-- INPUT SECTION -->
+    <div id="inputSection">
+      <!-- Modified Player 1 Inputs: Two fields for team 1's names -->
+      <div id="player1Inputs" class="inputColumn">
+        <label for="team1Player1NameInput">Team 1 – Player 1 Name:</label>
+        <input type="text" id="team1Player1NameInput" placeholder="Enter Team 1 Player 1 Name">
+        
+        <label for="team1Player2NameInput">Team 1 – Player 2 Name:</label>
+        <input type="text" id="team1Player2NameInput" placeholder="Enter Team 1 Player 2 Name">
+        
+        <label for="player1StateInput">Player 1 State:</label>
+        <input type="text" id="player1StateInput" placeholder="Enter Player 1 State">
+        
+        <label for="player1SetScoreInput">Player 1 Set Score:</label>
+        <input type="number" id="player1SetScoreInput" placeholder="Enter Set Score (0-3)" min="0" max="3">
+        
+        <label for="player1ScoreInput">Player 1 Score:</label>
+        <input type="number" id="player1ScoreInput" placeholder="Enter Player 1 Score">
+      </div>
+      
+      <!-- Modified Player 2 Inputs: Two fields for team 2's names -->
+      <div id="player2Inputs" class="inputColumn">
+        <label for="team2Player1NameInput">Team 2 – Player 1 Name:</label>
+        <input type="text" id="team2Player1NameInput" placeholder="Enter Team 2 Player 1 Name">
+        
+        <label for="team2Player2NameInput">Team 2 – Player 2 Name:</label>
+        <input type="text" id="team2Player2NameInput" placeholder="Enter Team 2 Player 2 Name">
+        
+        <label for="player2StateInput">Player 2 State:</label>
+        <input type="text" id="player2StateInput" placeholder="Enter Player 2 State">
+        
+        <label for="player2SetScoreInput">Player 2 Set Score:</label>
+        <input type="number" id="player2SetScoreInput" placeholder="Enter Set Score (0-3)" min="0" max="3">
+        
+        <label for="player2ScoreInput">Player 2 Score:</label>
+        <input type="number" id="player2ScoreInput" placeholder="Enter Player 2 Score">
+      </div>
+      
+      <!-- Current Board and Swap -->
+      <div id="currentBoardInputs" class="inputColumn">
+        <label for="currentBoardInput">Current Board:</label>
+        <input type="number" id="currentBoardInput" placeholder="Enter Current Board (0-8)" min="0" max="8" value="0">
+        <br>
+        <div id="swapPlayersContainer" class="actionGroup">
+          <button id="swapPlayersButton">Swap Players</button>
+        </div>
+        <div class="checkboxContainer">
+          <label for="disableInputsCheckbox">
+            <input type="checkbox" id="disableInputsCheckbox">
+            Disable Player Name and State Inputs
+          </label>
+        </div>
+        
+        <div class="activePlayerContainer">
+          <label for="activePlayer1">
+            <input type="checkbox" id="activePlayer1" class="activePlayerCheckbox">
+            Highlight Player 1
+          </label>
+          <label for="activePlayer2">
+            <input type="checkbox" id="activePlayer2" class="activePlayerCheckbox">
+            Highlight Player 2
+          </label>
+        </div>
+      </div>
+      
+      <!-- Announcements Section (Unchanged) -->
+      <div id="currentBoardInputs" class="inputColumn">
+        <label for="queenPocketedDropdown">Select Player to pocket Queen:</label>
+        <div id="actionInputs" class="actionContainer">
+          <div id="queenPocketedInputs" class="actionGroup">
+            <select id="queenPocketedDropdown">
+              <option value="player1">Player 1</option>
+              <option value="player2">Player 2</option>
+            </select>
+            <button id="queenPocketedButton">Announce Queen</button>
+          </div>
+          <label for="winnerDropdown">Select Winner:</label>
+          <div id="winnerInputs" class="actionGroup">
+            <select id="winnerDropdown">
+              <option value="player1">Player 1</option>
+              <option value="player2">Player 2</option>
+            </select>
+            <button id="winnerButton">Announce Winner</button>
+          </div>
+        </div>
+      </div>
+      <div id="currentBoardInputs" class="inputColumn">
+        <label for="whiteSlamDropdown">Select White Slam:</label>
+        <div id="actionInputs" class="actionContainer">
+          <div id="whiteSlamInputs" class="actionGroup">
+            <select id="whiteSlamDropdown">
+              <option value="player1">Player 1</option>
+              <option value="player2">Player 2</option>
+            </select>
+            <button id="whiteSlamButton">Announce White Slam</button>
+          </div>
+          <label for="blackSlamDropdown">Select Black Slam:</label>
+          <div id="blackSlamInputs" class="actionGroup">
+            <select id="blackSlamDropdown">
+              <option value="player1">Player 1</option>
+              <option value="player2">Player 2</option>
+            </select>
+            <button id="blackSlamButton">Announce Black Slam</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Snackbar for messages -->
+    <div class="snackbar" id="snackbar"></div>
+    
+    <script type="text/javascript">
+      // Run scripts after DOM is loaded
+      document.addEventListener("DOMContentLoaded", function() {
+        // Initialize default scoreboard values
+        document.getElementById('player1SetBoxText').textContent = "00";
+        document.getElementById('player2SetBoxText').textContent = "00";
+        document.getElementById('player1ScoreText').textContent = "00";
+        document.getElementById('player2ScoreText').textContent = "00";
+        document.getElementById('currentBoardText').textContent = "00";
+        
+        // Update combined name for Player 1: display names on separate lines using <br>
+        function updateTeam1Name() {
+          var name1 = document.getElementById('team1Player1NameInput').value || "Player 1A";
+          var name2 = document.getElementById('team1Player2NameInput').value || "Player 1B";
+          var combined = name1 + "<br>" + name2;
+          document.getElementById('player1NameText').innerHTML = combined;
+          updateLabels();
+          // Update dropdown options (single line)
+          var dropdownName = name1 + " & " + name2;
+          document.querySelector('#queenPocketedDropdown option[value="player1"]').textContent = dropdownName;
+          document.querySelector('#winnerDropdown option[value="player1"]').textContent = dropdownName;
+          document.querySelector('#whiteSlamDropdown option[value="player1"]').textContent = dropdownName;
+          document.querySelector('#blackSlamDropdown option[value="player1"]').textContent = dropdownName;
+        }
+        document.getElementById('team1Player1NameInput').addEventListener('input', updateTeam1Name);
+        document.getElementById('team1Player2NameInput').addEventListener('input', updateTeam1Name);
+        
+        // Update combined name for Player 2: display names on separate lines
+        function updateTeam2Name() {
+          var name1 = document.getElementById('team2Player1NameInput').value || "Player 2A";
+          var name2 = document.getElementById('team2Player2NameInput').value || "Player 2B";
+          var combined = name1 + "<br>" + name2;
+          document.getElementById('player2NameText').innerHTML = combined;
+          updateLabels();
+          var dropdownName = name1 + " & " + name2;
+          document.querySelector('#queenPocketedDropdown option[value="player2"]').textContent = dropdownName;
+          document.querySelector('#winnerDropdown option[value="player2"]').textContent = dropdownName;
+          document.querySelector('#whiteSlamDropdown option[value="player2"]').textContent = dropdownName;
+          document.querySelector('#blackSlamDropdown option[value="player2"]').textContent = dropdownName;
+        }
+        document.getElementById('team2Player1NameInput').addEventListener('input', updateTeam2Name);
+        document.getElementById('team2Player2NameInput').addEventListener('input', updateTeam2Name);
+        
+        // Real-time updates for state fields remain unchanged
+        document.getElementById('player1StateInput').addEventListener('input', function(e) {
+          var state = e.target.value;
+          document.getElementById('player1StateText').textContent = state;
+          updateLabels();
+        });
+        document.getElementById('player2StateInput').addEventListener('input', function(e) {
+          var state = e.target.value;
+          document.getElementById('player2StateText').textContent = state;
+          updateLabels();
+        });
+        
+        // Real-time updates for set scores
+        document.getElementById('player1SetScoreInput').addEventListener('input', function(e) {
+          let setScore = e.target.value;
+          if (setScore > 3) { setScore = 3; e.target.value = setScore; }
+          setScore = setScore.toString().padStart(2, '0');
+          document.getElementById('player1SetBoxText').textContent = setScore;
+        });
+        document.getElementById('player2SetScoreInput').addEventListener('input', function(e) {
+          let setScore = e.target.value;
+          if (setScore > 3) { setScore = 3; e.target.value = setScore; }
+          setScore = setScore.toString().padStart(2, '0');
+          document.getElementById('player2SetBoxText').textContent = setScore;
+        });
+        
+        // Real-time updates for scores
+        document.getElementById('player1ScoreInput').addEventListener('input', function(e) {
+          let score = e.target.value;
+          if (score < 0) { score = 0; e.target.value = score; }
+          else if (score > 99) { score = 99; e.target.value = score; }
+          score = score.toString().padStart(2, '0');
+          document.getElementById('player1ScoreText').textContent = score;
+        });
+        document.getElementById('player2ScoreInput').addEventListener('input', function(e) {
+          let score = e.target.value;
+          if (score < 0) { score = 0; e.target.value = score; }
+          else if (score > 99) { score = 99; e.target.value = score; }
+          score = score.toString().padStart(2, '0');
+          document.getElementById('player2ScoreText').textContent = score;
+        });
+        
+        // Update Current Board number
+        document.getElementById('currentBoardInput').addEventListener('input', function(e) {
+          let board = e.target.value;
+          if (board < 0) { board = 0; e.target.value = board; }
+          else if (board > 8) { board = 8; e.target.value = board; }
+          board = board.toString().padStart(2, '0');
+          document.getElementById('currentBoardText').textContent = board;
+          document.getElementById('player1QueenIcon').style.display = 'none';
+          document.getElementById('player2QueenIcon').style.display = 'none';
+        });
+        
+        // Announce Pocketed Queen with combined names in one line using " & "
+        document.getElementById('queenPocketedButton').addEventListener('click', function () {
+          document.getElementById('player1QueenIcon').style.display = 'none';
+          document.getElementById('player2QueenIcon').style.display = 'none';
+          const dropdown = document.getElementById('queenPocketedDropdown');
+          const selectedPlayer = dropdown.value;
+          let iconElement = null;
+          if (selectedPlayer === 'player1') { iconElement = document.getElementById('player1QueenIcon'); }
+          else if (selectedPlayer === 'player2') { iconElement = document.getElementById('player2QueenIcon'); }
+          if (iconElement) { iconElement.style.display = 'inline'; }
+          const playerName = selectedPlayer === 'player1'
+            ? (document.getElementById('player1NameText').innerText || 'Player 1').replace(/\n/g, ' & ')
+            : (document.getElementById('player2NameText').innerText || 'Player 2').replace(/\n/g, ' & ');
+          showMessage(`${playerName} pocketed the queen`);
+        });
+        
+        // Utility function to display messages
+        function showMessage(message) {
+          const messageBox = document.getElementById('queenPocketedMessage');
+          const messageText = document.getElementById('queenPocketedText');
+          messageText.textContent = message;
+          messageBox.classList.add('show');
+          if (messageBox.timeout) { clearTimeout(messageBox.timeout); }
+          messageBox.timeout = setTimeout(() => { messageBox.classList.remove('show'); }, 3000);
+        }
+        
+        // Announce Winner and Slams using combined names in one line
+        document.getElementById('winnerButton').addEventListener('click', function () {
+          announce('winnerDropdown', 'wins the game 🎉');
+        });
+        document.getElementById('whiteSlamButton').addEventListener('click', function () {
+          announceSlam('whiteSlamDropdown', 'White Slam by');
+        });
+        document.getElementById('blackSlamButton').addEventListener('click', function () {
+          announceSlam('blackSlamDropdown', 'Black Slam by');
+        });
+        
+        function announce(dropdownId, action) {
+          const dropdown = document.getElementById(dropdownId);
+          const selectedPlayer = dropdown.value;
+          const player1Name = (document.getElementById('player1NameText').innerText || 'Player 1').replace(/\n/g, ' & ');
+          const player2Name = (document.getElementById('player2NameText').innerText || 'Player 2').replace(/\n/g, ' & ');
+          const message = selectedPlayer === 'player1'
+            ? `${player1Name} ${action}`
+            : `${player2Name} ${action}`;
+          showMessage(message);
+        }
+        
+        function announceSlam(dropdownId, action) {
+          const dropdown = document.getElementById(dropdownId);
+          const selectedPlayer = dropdown.value;
+          const player1Name = (document.getElementById('player1NameText').innerText || 'Player 1').replace(/\n/g, ' & ');
+          const player2Name = (document.getElementById('player2NameText').innerText || 'Player 2').replace(/\n/g, ' & ');
+          const message = selectedPlayer === 'player1'
+            ? `${action} ${player1Name}`
+            : `${action} ${player2Name}`;
+          showMessage(message);
+        }
+        
+        // Swap Players functionality: Swap data between Player 1 and Player 2
+        document.getElementById('swapPlayersButton').addEventListener('click', function () {
+          // Swap the combined names (using innerHTML for line breaks)
+          const p1NameElem = document.getElementById('player1NameText');
+          const p2NameElem = document.getElementById('player2NameText');
+          [p1NameElem.innerHTML, p2NameElem.innerHTML] = [p2NameElem.innerHTML, p1NameElem.innerHTML];
+          
+          // Swap state inputs and update display
+          const p1StateInput = document.getElementById('player1StateInput');
+          const p2StateInput = document.getElementById('player2StateInput');
+          [p1StateInput.value, p2StateInput.value] = [p2StateInput.value, p1StateInput.value];
+          document.getElementById('player1StateText').textContent = p1StateInput.value;
+          document.getElementById('player2StateText').textContent = p2StateInput.value;
+          
+          // Swap set scores
+          const p1SetInput = document.getElementById('player1SetScoreInput');
+          const p2SetInput = document.getElementById('player2SetScoreInput');
+          [p1SetInput.value, p2SetInput.value] = [p2SetInput.value, p1SetInput.value];
+          document.getElementById('player1SetBoxText').textContent = p1SetInput.value.toString().padStart(2, '0');
+          document.getElementById('player2SetBoxText').textContent = p2SetInput.value.toString().padStart(2, '0');
+          
+          // Swap scores
+          const p1ScoreInput = document.getElementById('player1ScoreInput');
+          const p2ScoreInput = document.getElementById('player2ScoreInput');
+          [p1ScoreInput.value, p2ScoreInput.value] = [p2ScoreInput.value, p1ScoreInput.value];
+          document.getElementById('player1ScoreText').textContent = p1ScoreInput.value.toString().padStart(2, '0');
+          document.getElementById('player2ScoreText').textContent = p2ScoreInput.value.toString().padStart(2, '0');
+          
+          updateLabels();
+        });
+        
+        // Update labels for set/score inputs
+        function updateLabels() {
+          const p1Name = document.getElementById('player1NameText').innerText || 'Player 1';
+          const p2Name = document.getElementById('player2NameText').innerText || 'Player 2';
+          const p1SetLabel = document.querySelector('label[for="player1SetScoreInput"]');
+          const p2SetLabel = document.querySelector('label[for="player2SetScoreInput"]');
+          const p1ScoreLabel = document.querySelector('label[for="player1ScoreInput"]');
+          const p2ScoreLabel = document.querySelector('label[for="player2ScoreInput"]');
+          
+          if(p1SetLabel) p1SetLabel.textContent = `${p1Name} Set Score`;
+          if(p2SetLabel) p2SetLabel.textContent = `${p2Name} Set Score`;
+          if(p1ScoreLabel) p1ScoreLabel.textContent = `${p1Name} Score`;
+          if(p2ScoreLabel) p2ScoreLabel.textContent = `${p2Name} Score`;
+        }
+        
+        // Disable inputs if checkbox is checked
+        document.getElementById('disableInputsCheckbox').addEventListener('change', function () {
+          const isDisabled = this.checked;
+          const inputs = [
+            document.getElementById('team1Player1NameInput'),
+            document.getElementById('team1Player2NameInput'),
+            document.getElementById('player1StateInput'),
+            document.getElementById('team2Player1NameInput'),
+            document.getElementById('team2Player2NameInput'),
+            document.getElementById('player2StateInput')
+          ];
+          inputs.forEach(input => {
+            input.disabled = isDisabled;
+            input.style.backgroundColor = isDisabled ? '#e0e0e0' : '';
+            input.style.cursor = isDisabled ? 'not-allowed' : '';
+          });
+        });
+        
+        // Highlight team functionality
+        const activePlayer1Checkbox = document.getElementById("activePlayer1");
+        const activePlayer2Checkbox = document.getElementById("activePlayer2");
+        const player1playing = document.getElementById("player1playing");
+        const player2playing = document.getElementById("player2playing");
+        
+        activePlayer1Checkbox.addEventListener("change", function () {
+          if (this.checked) {
+            activePlayer2Checkbox.checked = false;
+            player1playing.hidden = false;
+            player2playing.hidden = true;
+          } else {
+            player1playing.hidden = true;
+          }
+        });
+        
+        activePlayer2Checkbox.addEventListener("change", function () {
+          if (this.checked) {
+            activePlayer1Checkbox.checked = false;
+            player2playing.hidden = false;
+            player1playing.hidden = true;
+          } else {
+            player2playing.hidden = true;
+          }
+        });
+        
+        // Initial calls to update combined names
+        updateTeam1Name();
+        updateTeam2Name();
+      });
+    </script>
+  </body>
+</html>
