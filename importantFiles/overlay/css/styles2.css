@@ -66,55 +66,55 @@ span {
 
 
 #player1Name {
-    background-image: url("../../../imgs/Left-player-name.png");
+    background-image: url("../../../imgs/Left-player-name-new.png");
     animation: opacityHalfFadeIn;
     animation-duration: 2s;
 }
 
 #player1Set {
-    background-image: url("../../../imgs/Left-player-set.png");
+    background-image: url("../../../imgs/Left-player-set-new.png");
     animation: opacityHalfFadeIn;
     animation-duration: 2s;
 }
 #player2Set {
-    background-image: url("../../../imgs/Right-player-set.png");
+    background-image: url("../../../imgs/Right-player-set-new.png");
     animation: opacityHalfFadeIn;
     animation-duration: 2s;
 }
 
 #player1Score {
-    background-image: url("../../../imgs/Left-player-score.png");
+    background-image: url("../../../imgs/Left-player-score-new.png");
     animation: opacityHalfFadeIn;
     animation-duration: 2s;
 }
 #player2Score {
-    background-image: url("../../../imgs/Right-player-score.png");
+    background-image: url("../../../imgs/Right-player-score-new.png");
     animation: opacityHalfFadeIn;
     animation-duration: 2s;
 }
 
 #player1State {
-    background-image: url("../../../imgs/Left-State-name.png");
+    background-image: url("../../../imgs/Left-State-name-new.png");
     animation: opacityGradualFadeIn;
     animation-duration: 1s;
     z-index: -1;
 }
 
 #player2State {
-    background-image: url("../../../imgs/Right-State-name.png");
+    background-image: url("../../../imgs/Right-State-name-new.png");
     animation: opacityHalfFadeIn;
     animation-duration: 3s;
     z-index: -1;
 }
 
 #player2Name {
-    background-image: url("../../../imgs/Right-Title-box.png");
+    background-image: url("../../../imgs/Right-Title-box-new.png");
     animation: opacityHalfFadeIn;
     animation-duration: 2s;
 }
 
 #mainScore {
-    background-image: url("../../../imgs/Center.png");
+    background-image: url("../../../imgs/Center-new.png");
     animation: opacityGradualFadeIn;
     animation-duration: 0.5s;
 }
