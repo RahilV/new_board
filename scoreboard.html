@@ -456,6 +456,19 @@
 
 		// Swap Players Functionality
 	document.getElementById('swapPlayersButton').addEventListener('click', function () {
+		// Reset queen
+		document.getElementById('player1QueenIcon').style.display = 'none';
+		document.getElementById('player2QueenIcon').style.display = 'none';
+		
+		// Get Queen Icons
+		const player1QueenIcon = document.getElementById('player1QueenIcon');
+		const player2QueenIcon = document.getElementById('player2QueenIcon');
+
+		// **Step 1: Swap the IDs of the Queen Icons**
+		player1QueenIcon.id = 'tempQueenIcon';  // Temporary ID to prevent conflicts
+		player2QueenIcon.id = 'player1QueenIcon';
+		player1QueenIcon.id = 'player2QueenIcon';
+
 		// Get scoreboard elements
 		const player1NameText = document.getElementById('player1NameText');
 		const player2NameText = document.getElementById('player2NameText');
