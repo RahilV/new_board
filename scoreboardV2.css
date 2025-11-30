@@ -30,7 +30,7 @@
 /* Player 1 Name Box - Left purple section (after white box) */
 #player1NameBox {
 	top: 150px !important;
-	left: 230px !important;
+	left: 200px !important;
 	width: 350px !important;
 	text-align: left !important;
 }
@@ -38,7 +38,7 @@
 /* Player 1 State Name - Left purple section (below name) */
 #player1StateName {
 	top: 195px !important;
-	left: 230px !important;
+	left: 200px !important;
 	width: 350px !important;
 	text-align: left !important;
 }
@@ -92,7 +92,7 @@
 /* Player 2 Name Box - Right pink section */
 #player2NameBox {
 	top: 150px !important;
-	right: 230px !important;
+	right: 200px !important;
 	width: 350px !important;
 	text-align: right !important;
 }
@@ -100,7 +100,7 @@
 /* Player 2 State Name - Right pink section (below name) */
 #player2StateName {
 	top: 195px !important;
-	right: 230px !important;
+	right: 200px !important;
 	width: 350px !important;
 	text-align: right !important;
 }
