@@ -1,0 +1,253 @@
+/* Scoreboard V2 Custom Styles */
+
+/* New scoreboard background image */
+#newScoreboardBackground {
+	margin: 0;
+	margin-top: 120px;
+	width: 1920px;
+	height: 1080px;
+	position: fixed;
+	top: 0;
+	left: 0;
+	background-image: url("imgsV2/newboard.png");
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: center top;
+	transform: scale(0.85);
+	transform-origin: top center;
+	z-index: -2;
+}
+
+.queenIcon {
+	content: url("imgsV2/queen.png");
+}
+
+/* Layout from left to right:
+   [White box] → Player 1 Name → Player 1 State → SETS → SCORE → BOARD → SCORE → SETS → Player 2 Name → Player 2 State → [White box]
+*/
+
+
+/* Player 1 Name Box - Left purple section (after white box) */
+#player1NameBox {
+	top: 150px !important;
+	left: 230px !important;
+	width: 350px !important;
+	text-align: left !important;
+}
+
+/* Player 1 State Name - Left purple section (below name) */
+#player1StateName {
+	top: 195px !important;
+	left: 230px !important;
+	width: 350px !important;
+	text-align: left !important;
+}
+
+/* Set Boxes - Left pink section (after Player 1 state) */
+#player1SetBox {
+	top: 170px !important;
+	left: 620px !important;
+	width: 100px !important;
+	height: 65px !important;
+	line-height: 35px !important;
+}
+
+/* Score Boxes - Left pink section (after SETS) */
+#player1ScoreBox {
+	top: 170px !important;
+	left: 750px !important;
+	width: 100px !important;
+	height: 65px !important;
+	line-height: 35px !important;
+}
+
+/* Board Number Box - Center white/grey section */
+#boardNumberBox {
+	top: 150px !important;
+	left: 50% !important;
+	transform: translateX(-50%) !important;
+	width: 150px !important;
+	height: 110px !important;
+	line-height: 70px !important;
+}
+
+/* Score Boxes - Right pink section (before SETS) */
+#player2ScoreBox {
+	top: 170px !important;
+	right: 750px !important;
+	width: 100px !important;
+	height: 65px !important;
+	line-height: 35px !important;
+}
+
+/* Set Boxes - Right pink section (before Player 2 name) */
+#player2SetBox {
+	top: 170px !important;
+	right: 620px !important;
+	width: 100px !important;
+	height: 65px !important;
+	line-height: 35px !important;
+}
+
+/* Player 2 Name Box - Right pink section */
+#player2NameBox {
+	top: 150px !important;
+	right: 230px !important;
+	width: 350px !important;
+	text-align: right !important;
+}
+
+/* Player 2 State Name - Right pink section (below name) */
+#player2StateName {
+	top: 195px !important;
+	right: 230px !important;
+	width: 350px !important;
+	text-align: right !important;
+}
+
+/* Ensure contentBoxes can have positioned labels */
+#player1SetBox, #player2SetBox, #player1ScoreBox, #player2ScoreBox, #boardNumberBox {
+	position: fixed;
+}
+
+/* Labels for SETS, SCORE, BOARD */
+#player1SetBox::before {
+	content: "SETS";
+	position: absolute;
+	top: -22px;
+	left: 0;
+	width: 100%;
+	text-align: center;
+	font-size: 18px;
+	font-weight: bold;
+	color: white;
+	text-transform: uppercase;
+	font-family: 'Poppins', sans-serif;
+	letter-spacing: 1px;
+}
+
+#player2SetBox::before {
+	content: "SETS";
+	position: absolute;
+	top: -22px;
+	left: 0;
+	width: 100%;
+	text-align: center;
+	font-size: 18px;
+	font-weight: bold;
+	color: white;
+	text-transform: uppercase;
+	font-family: 'Poppins', sans-serif;
+	letter-spacing: 1px;
+}
+
+#player1ScoreBox::before {
+	content: "SCORE";
+	position: absolute;
+	top: -22px;
+	left: 0;
+	width: 100%;
+	text-align: center;
+	font-size: 18px;
+	font-weight: bold;
+	color: white;
+	text-transform: uppercase;
+	font-family: 'Poppins', sans-serif;
+	letter-spacing: 1px;
+}
+
+#player2ScoreBox::before {
+	content: "SCORE";
+	position: absolute;
+	top: -22px;
+	left: 0;
+	width: 100%;
+	text-align: center;
+	font-size: 18px;
+	font-weight: bold;
+	color: white;
+	text-transform: uppercase;
+	font-family: 'Poppins', sans-serif;
+	letter-spacing: 1px;
+}
+
+#boardNumberBox::before {
+	content: "BOARD";
+	position: absolute;
+	top: -30px;
+	left: 50%;
+	transform: translateX(-50%);
+	width: 100%;
+	text-align: center;
+	font-size: 18px;
+	font-weight: bold;
+	color: white;
+	text-transform: uppercase;
+	font-family: 'Poppins', sans-serif;
+	letter-spacing: 1px;
+}
+
+/* Text styling adjustments */
+#player1NameText, #player2NameText {
+	font-size: 26px !important;
+	font-weight: bold !important;
+	color: #ffffff !important;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+}
+
+#player1StateText, #player2StateText {
+	font-size: 14px !important;
+	font-weight: bold !important;
+	color: #ffffff !important;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+}
+
+#player1SetBoxText, #player2SetBoxText {
+	font-size: 36px !important;
+	font-weight: bold !important;
+	color: #ffffff !important;
+}
+
+#player1ScoreText, #player2ScoreText {
+	font-size: 36px !important;
+	font-weight: bold !important;
+	color: #ffffff !important;
+}
+
+#currentBoardText {
+	font-size: 58px !important;
+	font-weight: bold !important;
+	color: #000000 !important;
+}
+#player1playing {
+    position: fixed;
+    top: 165px;
+    left: 35px;
+    background-color: red;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 5px 10px;
+    border-radius: 5px;
+    text-transform: uppercase;
+    animation: smoothBlink 3s infinite ease-in-out;
+    font-family: 'Poppins', sans-serif;
+}
+
+#player2playing {
+    position: fixed;
+    top: 165px;
+    right: 35px;
+    background-color: red;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 5px 10px;
+    border-radius: 5px;
+    text-transform: uppercase;
+    animation: smoothBlink 1.5s infinite ease-in-out;
+	font-family: 'Poppins', sans-serif;
+}
+
