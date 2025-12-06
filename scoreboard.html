@@ -124,7 +124,7 @@
 			<!-- Current Board Input -->
 			<div id="currentBoardInputs" class="inputColumn">
 				<label for="currentBoardInput">Current Board:</label>
-				<input type="number" id="currentBoardInput" placeholder="Enter Current Board (0-8)" min="0" max="8" value="0">
+				<input type="number" id="currentBoardInput" placeholder="Enter Current Board (0-25)" min="0" max="25" value="0">
 				<br>
 				<div id="swapPlayersContainer" class="actionGroup">
 					<button id="swapPlayersButton">Swap Players</button>
@@ -300,12 +300,12 @@
 		document.getElementById('currentBoardInput').addEventListener('input', function(event) {
 			let board = event.target.value;
 
-			// Ensure the board number is within the range 0-8
+			// Ensure the board number is within the range 0-25
 			if (board < 0) {
 				board = 0;
 				event.target.value = board;
-			} else if (board > 8) {
-				board = 8;
+			} else if (board > 25) {
+				board = 25;
 				event.target.value = board;
 			}
 
