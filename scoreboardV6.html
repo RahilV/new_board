@@ -1,0 +1,841 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<script type="text/javascript" src="importantFiles/overlay/js/jquery.3.5.1.min.js"></script>
+		<script type="text/javascript" src="importantFiles/overlay/js/fitty.js"></script>
+
+		<script type="text/javascript" src="importantFiles/overlay/js/constants.js"></script>
+		<script type="text/javascript" src="importantFiles/overlay/js/variables.js"></script>
+		<script type="text/javascript" src="importantFiles/overlay/js/helper.js"></script>
+		<script type="text/javascript" src="importantFiles/overlay/js/overlayManager.js"></script>
+
+		<!-- Custom font links here -->
+		<link rel="preconnect" href="https://fonts.gstatic.com">
+		<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+		<link rel="stylesheet" type="text/css" href="importantFiles/overlay/css/styles.css"></link>
+		<link rel="stylesheet" type="text/css" href="importantFiles/overlay/css/font.css"></link>
+		<link rel="stylesheet" type="text/css" href="importantFiles/overlay/css/contentBoxes.css"></link>
+		<link rel="stylesheet" type="text/css" href="importantFiles/overlay/css/queu.css"></link>
+		<link rel="stylesheet" type="text/css" href="importantFiles/overlay/css/snackbar.css"></link>
+
+		<style id="contentCSS" type="text/css"></style>
+		<link id="contentFile" rel="stylesheet" type="text/css"></link>
+		
+		<!-- Scoreboard V6 Custom Styles -->
+		<link rel="stylesheet" type="text/css" href="scoreboardV6.css"></link>
+	</head>
+	<body>
+		<div class="scoreBoard">
+			<!-- Div to display the message -->
+			<div id="queenPocketedMessage" class="contentBox">
+				<span id="queenPocketedText"></span>
+			</div>
+
+			<!-- New scoreboard background image -->
+			<div id="newScoreboardBackground"></div>
+
+			<!-- divs to contain text content -->
+			<!-- Layout: [White box] → Player 1 Name → Player 1 State → SETS → SCORE → BOARD → SCORE → SETS → Player 2 Name → Player 2 State → [White box] -->
+			
+			<!-- Left white box - Player 1 Playing indicator -->
+			<div id="player1playing" hidden>PLAYING</div>
+			
+			<!-- Player 1 Name - Left purple section -->
+			<div class="contentBox" id="player1NameBox">
+				<span class="playerNameContainer">
+					<img id="player1QueenIcon" src="imgsV2/queen.png" alt="Queen Icon" class="queenIcon" style="display: none;">
+					<span class="playerNameText" id="player1NameText"></span>
+				</span>
+			</div>
+
+			<!-- Player 1 State - Left purple section -->
+			<div class="contentBox" id="player1StateName">
+				<span class="player1StateText" id="player1StateText"></span>
+			</div>
+
+			<!-- Player 1 SETS - Left pink section -->
+			<div class="contentBox" id="player1SetBox">
+				<span class="playerNameText" id="player1SetBoxText"></span>
+			</div>
+
+			<!-- Player 1 SCORE - Left pink section -->
+			<div class="contentBox" id="player1ScoreBox">
+				<span class="playerScoreText" id="player1ScoreText"></span>
+			</div>
+
+			<!-- BOARD - Center white/grey section -->
+			<div class="contentBox" id="boardNumberBox">
+				<span class="currentBoardText" id="currentBoardText"></span>
+			</div>
+
+			<!-- Player 2 SCORE - Right pink section -->
+			<div class="contentBox" id="player2ScoreBox">
+				<span class="playerScoreText" id="player2ScoreText"></span>
+			</div>
+
+			<!-- Player 2 SETS - Right pink section -->
+			<div class="contentBox" id="player2SetBox">
+				<span class="playerNameText" id="player2SetBoxText"></span>
+			</div>
+
+			<!-- Player 2 Name - Right pink section -->
+			<div class="contentBox" id="player2NameBox">
+				<span class="playerNameContainer">
+					<img id="player2QueenIcon" src="imgsV2/queen.png" alt="Queen Icon" class="queenIcon" style="display: none;">
+					<span class="playerNameText" id="player2NameText"></span>
+				</span>
+			</div>
+
+			<!-- Player 2 State - Right pink section -->
+			<div class="contentBox" id="player2StateName">
+				<span class="player2StateText" id="player2StateText"></span>
+			</div>
+
+			<!-- Right white box - Player 2 Playing indicator -->
+			<div id="player2playing" hidden>PLAYING</div>
+		</div>
+		
+		<div id="inputSection">
+			<div id="player1Inputs" class="inputColumn player1Column">
+				<div class="playerColumnHeader">Player 1</div>
+
+				<label for="player1NameInput">Player 1 Name:</label>
+				<input type="text" id="player1NameInput" placeholder="Enter Player 1 Name" maxlength="24">
+
+				<label for="player1StateInput">Player 1 State:</label>
+				<input type="text" id="player1StateInput" placeholder="Enter Player 1 State" maxlength="24">
+
+				<label for="player1SetScoreInput">Player 1 Set Score:</label>
+				<div class="stepperRow">
+					<button type="button" class="stepBtn" data-action="dec" data-target="player1SetScoreInput" aria-label="Decrease Player 1 set score">&minus;</button>
+					<input type="number" id="player1SetScoreInput" placeholder="0-3" min="0" max="3">
+					<button type="button" class="stepBtn" data-action="inc" data-target="player1SetScoreInput" aria-label="Increase Player 1 set score">+</button>
+				</div>
+
+				<label for="player1ScoreInput">Player 1 Score:</label>
+				<div class="stepperRow">
+					<button type="button" class="stepBtn" data-action="dec" data-target="player1ScoreInput" aria-label="Decrease Player 1 score">&minus;</button>
+					<input type="number" id="player1ScoreInput" placeholder="Enter Player 1 Score" min="0" max="99">
+					<button type="button" class="stepBtn" data-action="inc" data-target="player1ScoreInput" aria-label="Increase Player 1 score">+</button>
+				</div>
+			</div>
+
+			<div id="player2Inputs" class="inputColumn player2Column">
+				<div class="playerColumnHeader">Player 2</div>
+
+				<label for="player2NameInput">Player 2 Name:</label>
+				<input type="text" id="player2NameInput" placeholder="Enter Player 2 Name" maxlength="24">
+
+				<label for="player2StateInput">Player 2 State:</label>
+				<input type="text" id="player2StateInput" placeholder="Enter Player 2 State" maxlength="24">
+
+				<label for="player2SetScoreInput">Player 2 Set Score:</label>
+				<div class="stepperRow">
+					<button type="button" class="stepBtn" data-action="dec" data-target="player2SetScoreInput" aria-label="Decrease Player 2 set score">&minus;</button>
+					<input type="number" id="player2SetScoreInput" placeholder="0-3" min="0" max="3">
+					<button type="button" class="stepBtn" data-action="inc" data-target="player2SetScoreInput" aria-label="Increase Player 2 set score">+</button>
+				</div>
+
+				<label for="player2ScoreInput">Player 2 Score:</label>
+				<div class="stepperRow">
+					<button type="button" class="stepBtn" data-action="dec" data-target="player2ScoreInput" aria-label="Decrease Player 2 score">&minus;</button>
+					<input type="number" id="player2ScoreInput" placeholder="Enter Player 2 Score" min="0" max="99">
+					<button type="button" class="stepBtn" data-action="inc" data-target="player2ScoreInput" aria-label="Increase Player 2 score">+</button>
+				</div>
+			</div>
+
+			<!-- Board / match settings -->
+			<div id="boardInputs" class="inputColumn">
+				<label for="currentBoardInput">Current Board:</label>
+				<div class="stepperRow">
+					<button type="button" class="stepBtn" data-action="dec" data-target="currentBoardInput" aria-label="Previous board">&minus;</button>
+					<input type="number" id="currentBoardInput" placeholder="0-25" min="0" max="25" value="0">
+					<button type="button" class="stepBtn" data-action="inc" data-target="currentBoardInput" aria-label="Next board">+</button>
+				</div>
+
+				<div id="swapPlayersContainer" class="actionGroup">
+					<button id="swapPlayersButton">Swap Players</button>
+				</div>
+				<!-- Add Disable Inputs Checkbox -->
+				<div class="checkboxContainer">
+					<label for="disableInputsCheckbox">
+						<input type="checkbox" id="disableInputsCheckbox">
+						Disable Player Name and State Inputs
+					</label>
+				</div>
+
+				<div class="activePlayerContainer">
+					<label for="activePlayer1">
+						<input type="checkbox" id="activePlayer1" class="activePlayerCheckbox">
+						Highlight Player 1
+					</label>
+					<label for="activePlayer2">
+						<input type="checkbox" id="activePlayer2" class="activePlayerCheckbox">
+						Highlight Player 2
+					</label>
+				</div>
+			</div>
+
+			<!-- Queen / Winner -->
+			<div id="queenWinnerInputs" class="inputColumn">
+				<label for="queenPocketedDropdown">Select Player to pocket Queen:</label>
+				<div class="actionContainer">
+					<div id="queenPocketedInputs" class="actionGroup">
+						<select id="queenPocketedDropdown">
+							<option value="player1">Player 1</option>
+							<option value="player2">Player 2</option>
+						</select>
+						<button id="queenPocketedButton">Announce Queen</button>
+					</div>
+					<button id="clearQueenButton" type="button">Clear Queen Icon</button>
+
+					<label for="winnerDropdown">Select Winner (current board):</label>
+					<div id="winnerInputs" class="actionGroup">
+						<select id="winnerDropdown">
+							<option value="player1">Player 1</option>
+							<option value="player2">Player 2</option>
+						</select>
+						<button id="winnerButton">Announce Winner</button>
+					</div>
+				</div>
+			</div>
+
+			<!-- Slams -->
+			<div id="slamInputs" class="inputColumn">
+				<label for="whiteSlamDropdown">Select White Slam:</label>
+				<div class="actionContainer">
+					<div id="whiteSlamGroup" class="actionGroup">
+						<select id="whiteSlamDropdown">
+							<option value="player1">Player 1</option>
+							<option value="player2">Player 2</option>
+						</select>
+						<button id="whiteSlamButton">Announce White Slam</button>
+					</div>
+					<label for="blackSlamDropdown">Select Black Slam:</label>
+					<div id="blackSlamGroup" class="actionGroup">
+						<select id="blackSlamDropdown">
+							<option value="player1">Player 1</option>
+							<option value="player2">Player 2</option>
+						</select>
+						<button id="blackSlamButton">Announce Black Slam</button>
+					</div>
+				</div>
+			</div>
+
+			<!-- Match controls -->
+			<div id="matchControlsColumn" class="inputColumn">
+				<div id="matchOverBanner" hidden>MATCH OVER - start a New Match to continue</div>
+
+				<button id="undoButton" type="button" disabled>Undo Last Action (Ctrl+Z)</button>
+				<button id="newBoardButton" type="button">Start Next Board</button>
+				<button id="newMatchButton" type="button">New Match (Reset Scores)</button>
+				<button id="toggleLogButton" type="button">Show Activity Log</button>
+
+				<div id="shortcutLegend">
+					Shortcuts: <b>Ctrl+Z</b> Undo &middot; <b>1</b>/<b>2</b> Toggle highlight &middot; <b>B</b> Next board
+					(disabled while typing in a text field)
+				</div>
+			</div>
+		</div>
+
+		<!-- Activity log - a floating panel toggled on demand, so it never
+		     affects the height of the control panel above. -->
+		<div id="activityLogPanel" class="floatingPanel" hidden>
+			<div class="floatingPanelHeader">
+				<span>Activity Log</span>
+				<div class="floatingPanelActions">
+					<button id="clearLogButton" type="button">Clear</button>
+					<button id="closeLogButton" type="button" aria-label="Close activity log">&times;</button>
+				</div>
+			</div>
+			<ul id="activityLog"></ul>
+		</div>
+
+		<!-- snackbar -->
+		<div class="snackbar" id="snackbar"></div>
+	</body>
+	<script type="text/javascript">
+
+		// ---------------------------------------------------------------
+		// Small defensive DOM helpers - a missing/renamed element should
+		// never throw and silently break every listener declared after it
+		// (that one bug made V3's whole script fragile to typos).
+		// ---------------------------------------------------------------
+		function $id(id) {
+			return document.getElementById(id);
+		}
+		function setDisabled(id, disabled) {
+			const el = $id(id);
+			if (el) el.disabled = disabled;
+		}
+		function clamp(value, min, max) {
+			const n = Number(value);
+			if (!Number.isFinite(n)) return min;
+			return Math.min(max, Math.max(min, n));
+		}
+		function fireInput(el) {
+			el.dispatchEvent(new Event('input', { bubbles: true }));
+		}
+		function getPlayerName(key) {
+			const input = $id(key === 'player1' ? 'player1NameInput' : 'player2NameInput');
+			const fallback = key === 'player1' ? 'Player 1' : 'Player 2';
+			return (input && input.value.trim()) || fallback;
+		}
+		function safe(fn, label) {
+			try {
+				fn();
+			} catch (err) {
+				console.error(`[ScoreboardV6] ${label} failed:`, err);
+			}
+		}
+
+		// ---------------------------------------------------------------
+		// Activity log (operator-only - lives in #inputSection, never on
+		// the scoreboard itself, so it never ends up on stream).
+		// ---------------------------------------------------------------
+		const actionLog = [];
+		const LOG_LIMIT = 30;
+
+		function logAction(message) {
+			const time = new Date().toLocaleTimeString([], { hour12: false });
+			actionLog.unshift(`[${time}] ${message}`);
+			if (actionLog.length > LOG_LIMIT) actionLog.length = LOG_LIMIT;
+			const list = $id('activityLog');
+			if (!list) return;
+			list.innerHTML = '';
+			actionLog.forEach((line) => {
+				const li = document.createElement('li');
+				li.textContent = line;
+				list.appendChild(li);
+			});
+		}
+
+		// ---------------------------------------------------------------
+		// Undo stack - a list of small closures, each one capable of
+		// reversing exactly one user action. This works uniformly across
+		// value edits, queen-icon visibility, and the swap (which is its
+		// own inverse), without needing a single big state object.
+		// ---------------------------------------------------------------
+		const undoStack = [];
+		const UNDO_LIMIT = 30;
+
+		function pushUndo(undoFn) {
+			undoStack.push(undoFn);
+			if (undoStack.length > UNDO_LIMIT) undoStack.shift();
+			refreshUndoButton();
+		}
+		function undoLastAction() {
+			if (!undoStack.length) {
+				logAction('Nothing to undo.');
+				return;
+			}
+			const undoFn = undoStack.pop();
+			safe(undoFn, 'undo');
+			refreshUndoButton();
+			logAction('Undo: reverted last action.');
+		}
+		function refreshUndoButton() {
+			setDisabled('undoButton', undoStack.length === 0);
+		}
+
+		function captureValues(ids) {
+			const snapshot = {};
+			ids.forEach((id) => {
+				const el = $id(id);
+				if (el) snapshot[id] = el.value;
+			});
+			return snapshot;
+		}
+		function restoreValues(snapshot) {
+			Object.keys(snapshot).forEach((id) => {
+				const el = $id(id);
+				if (el) {
+					el.value = snapshot[id];
+					fireInput(el);
+				}
+			});
+		}
+
+		function getQueenState() {
+			const p1 = $id('player1QueenIcon');
+			const p2 = $id('player2QueenIcon');
+			if (p1 && p1.style.display === 'inline') return 'player1';
+			if (p2 && p2.style.display === 'inline') return 'player2';
+			return null;
+		}
+		function setQueenState(key) {
+			const p1 = $id('player1QueenIcon');
+			const p2 = $id('player2QueenIcon');
+			if (p1) p1.style.display = key === 'player1' ? 'inline' : 'none';
+			if (p2) p2.style.display = key === 'player2' ? 'inline' : 'none';
+		}
+
+		// ---------------------------------------------------------------
+		// Match-over state: locks score-changing controls until a new
+		// match is started.
+		// ---------------------------------------------------------------
+		let matchOver = false;
+		const MATCH_LOCK_IDS = ['player1ScoreInput', 'player2ScoreInput', 'player1SetScoreInput', 'player2SetScoreInput'];
+		const MATCH_LOCK_BUTTON_IDS = ['queenPocketedButton', 'winnerButton', 'whiteSlamButton', 'blackSlamButton', 'newBoardButton'];
+
+		function setMatchOver(flag) {
+			matchOver = flag;
+			const banner = $id('matchOverBanner');
+			if (banner) banner.hidden = !flag;
+			MATCH_LOCK_IDS.forEach((id) => setDisabled(id, flag));
+			document
+				.querySelectorAll(MATCH_LOCK_IDS.map((id) => `.stepBtn[data-target="${id}"]`).join(', '))
+				.forEach((btn) => (btn.disabled = flag));
+			MATCH_LOCK_BUTTON_IDS.forEach((id) => setDisabled(id, flag));
+		}
+
+		function advanceBoard() {
+			const boardInput = $id('currentBoardInput');
+			boardInput.value = clamp(Number(boardInput.value || 0) + 1, 0, 25);
+			fireInput(boardInput);
+			['player1ScoreInput', 'player2ScoreInput'].forEach((id) => {
+				const el = $id(id);
+				el.value = 0;
+				fireInput(el);
+			});
+			setQueenState(null);
+		}
+
+		// ---------------------------------------------------------------
+		// On-stream announcement banner
+		// ---------------------------------------------------------------
+		function showMessage(message) {
+			const messageBox = $id('queenPocketedMessage');
+			const messageText = $id('queenPocketedText');
+			if (!messageBox || !messageText) return;
+			messageText.textContent = message;
+			messageBox.classList.add('show');
+			if (messageBox.timeout) clearTimeout(messageBox.timeout);
+			messageBox.timeout = setTimeout(() => {
+				messageBox.classList.remove('show');
+			}, 3000);
+		}
+
+		// ---------------------------------------------------------------
+		// Labels above the inputs. Name/State stay static ("Player 1
+		// Name:"); Set Score/Score dynamically show the typed name plus
+		// a "(Player N)" suffix so they're never ambiguous after a swap.
+		// ---------------------------------------------------------------
+		function updateLabels() {
+			const player1Name = $id('player1NameInput').value || 'Player 1';
+			const player2Name = $id('player2NameInput').value || 'Player 2';
+
+			const player1SetScoreLabel = document.querySelector('label[for="player1SetScoreInput"]');
+			const player2SetScoreLabel = document.querySelector('label[for="player2SetScoreInput"]');
+			const player1ScoreLabel = document.querySelector('label[for="player1ScoreInput"]');
+			const player2ScoreLabel = document.querySelector('label[for="player2ScoreInput"]');
+
+			player1SetScoreLabel.textContent = `${player1Name} Set Score (Player 1)`;
+			player2SetScoreLabel.textContent = `${player2Name} Set Score (Player 2)`;
+
+			player1ScoreLabel.textContent = `${player1Name} Score (Player 1)`;
+			player2ScoreLabel.textContent = `${player2Name} Score (Player 2)`;
+		}
+
+		// ---------------------------------------------------------------
+		// Wiring: real-time text/number inputs -> on-screen text. Every
+		// numeric field is clamped through Number.isFinite, so a cleared
+		// field or pasted text can never show "NaN" on stream (V3's bug).
+		// ---------------------------------------------------------------
+		function wireNameAndStateInputs() {
+			$id('player1NameInput').addEventListener('input', (event) => {
+				$id('player1NameText').textContent = event.target.value;
+				document.querySelector('#queenPocketedDropdown option[value="player1"]').textContent = event.target.value || 'Player 1';
+				document.querySelector('#winnerDropdown option[value="player1"]').textContent = event.target.value || 'Player 1';
+				document.querySelector('#whiteSlamDropdown option[value="player1"]').textContent = event.target.value || 'Player 1';
+				document.querySelector('#blackSlamDropdown option[value="player1"]').textContent = event.target.value || 'Player 1';
+				updateLabels();
+			});
+
+			$id('player2NameInput').addEventListener('input', (event) => {
+				$id('player2NameText').textContent = event.target.value;
+				document.querySelector('#queenPocketedDropdown option[value="player2"]').textContent = event.target.value || 'Player 2';
+				document.querySelector('#winnerDropdown option[value="player2"]').textContent = event.target.value || 'Player 2';
+				document.querySelector('#whiteSlamDropdown option[value="player2"]').textContent = event.target.value || 'Player 2';
+				document.querySelector('#blackSlamDropdown option[value="player2"]').textContent = event.target.value || 'Player 2';
+				updateLabels();
+			});
+
+			$id('player1StateInput').addEventListener('input', (event) => {
+				$id('player1StateText').textContent = event.target.value;
+			});
+
+			$id('player2StateInput').addEventListener('input', (event) => {
+				$id('player2StateText').textContent = event.target.value;
+			});
+		}
+
+		function wireScoreInputs() {
+			$id('player1SetScoreInput').addEventListener('input', (event) => {
+				const value = clamp(event.target.value, 0, Number(event.target.max) || 3);
+				event.target.value = value;
+				$id('player1SetBoxText').textContent = value.toString().padStart(2, '0');
+			});
+
+			$id('player2SetScoreInput').addEventListener('input', (event) => {
+				const value = clamp(event.target.value, 0, Number(event.target.max) || 3);
+				event.target.value = value;
+				$id('player2SetBoxText').textContent = value.toString().padStart(2, '0');
+			});
+
+			$id('player1ScoreInput').addEventListener('input', (event) => {
+				const value = clamp(event.target.value, 0, 99);
+				event.target.value = value;
+				$id('player1ScoreText').textContent = value.toString().padStart(2, '0');
+			});
+
+			$id('player2ScoreInput').addEventListener('input', (event) => {
+				const value = clamp(event.target.value, 0, 99);
+				event.target.value = value;
+				$id('player2ScoreText').textContent = value.toString().padStart(2, '0');
+			});
+
+			$id('currentBoardInput').addEventListener('input', (event) => {
+				const value = clamp(event.target.value, 0, 25);
+				event.target.value = value;
+				$id('currentBoardText').textContent = value.toString().padStart(2, '0');
+				setQueenState(null);
+			});
+		}
+
+		// ---------------------------------------------------------------
+		// Undo snapshots for free-typed fields: capture the value the
+		// moment a field gains focus, before any edits happen.
+		// ---------------------------------------------------------------
+		function wireUndoableFocusSnapshots() {
+			const ids = [
+				'player1NameInput', 'player2NameInput', 'player1StateInput', 'player2StateInput',
+				'player1SetScoreInput', 'player2SetScoreInput', 'player1ScoreInput', 'player2ScoreInput',
+				'currentBoardInput',
+			];
+			ids.forEach((id) => {
+				const el = $id(id);
+				if (!el) return;
+				el.addEventListener('focus', () => {
+					const prevValue = el.value;
+					pushUndo(() => {
+						el.value = prevValue;
+						fireInput(el);
+					});
+				});
+			});
+		}
+
+		// ---------------------------------------------------------------
+		// Stepper +/- buttons next to every numeric field.
+		// ---------------------------------------------------------------
+		function wireSteppers() {
+			document.querySelectorAll('.stepBtn').forEach((btn) => {
+				btn.addEventListener('click', () => {
+					const el = $id(btn.dataset.target);
+					if (!el) return;
+					const min = Number(el.min || 0);
+					const max = Number(el.max || 99);
+					const prevValue = el.value;
+					pushUndo(() => {
+						el.value = prevValue;
+						fireInput(el);
+					});
+					const delta = btn.dataset.action === 'inc' ? 1 : -1;
+					el.value = clamp(Number(el.value || 0) + delta, min, max);
+					fireInput(el);
+				});
+			});
+		}
+
+		// ---------------------------------------------------------------
+		// Action buttons: queen, winner, slams, swap, new board/match.
+		// ---------------------------------------------------------------
+		function wireQueenButtons() {
+			$id('queenPocketedButton').addEventListener('click', () => {
+				const queenBefore = getQueenState();
+				pushUndo(() => setQueenState(queenBefore));
+
+				const key = $id('queenPocketedDropdown').value;
+				setQueenState(key);
+				const name = getPlayerName(key);
+				showMessage(`${name} pocketed the queen`);
+				logAction(`${name} pocketed the queen.`);
+			});
+
+			$id('clearQueenButton').addEventListener('click', () => {
+				const queenBefore = getQueenState();
+				if (!queenBefore) return;
+				pushUndo(() => setQueenState(queenBefore));
+				setQueenState(null);
+				logAction('Cleared queen icon.');
+			});
+		}
+
+		function wireWinnerButton() {
+			$id('winnerButton').addEventListener('click', () => {
+				if (matchOver) {
+					logAction('Match already over - start a New Match first.');
+					return;
+				}
+				const key = $id('winnerDropdown').value;
+				const name = getPlayerName(key);
+				if (!confirm(`Confirm: ${name} wins this board?`)) return;
+
+				const valuesBefore = captureValues(['player1ScoreInput', 'player2ScoreInput', 'player1SetScoreInput', 'player2SetScoreInput', 'currentBoardInput']);
+				const queenBefore = getQueenState();
+				const matchOverBefore = matchOver;
+				pushUndo(() => {
+					restoreValues(valuesBefore);
+					setQueenState(queenBefore);
+					setMatchOver(matchOverBefore);
+				});
+
+				const setInput = $id(key === 'player1' ? 'player1SetScoreInput' : 'player2SetScoreInput');
+				const setsToWin = Number(setInput.max) || 3;
+				setInput.value = clamp(Number(setInput.value || 0) + 1, 0, setsToWin);
+				fireInput(setInput);
+
+				if (Number(setInput.value) >= setsToWin) {
+					setMatchOver(true);
+					showMessage(`${name} WINS THE MATCH!`);
+					logAction(`${name} wins the match (${$id('player1SetScoreInput').value}-${$id('player2SetScoreInput').value} sets).`);
+				} else {
+					showMessage(`${name} wins the game`);
+					logAction(`${name} wins board #${$id('currentBoardText').textContent}.`);
+					advanceBoard();
+				}
+			});
+		}
+
+		function wireSlamButtons() {
+			$id('whiteSlamButton').addEventListener('click', () => {
+				const name = getPlayerName($id('whiteSlamDropdown').value);
+				showMessage(`White Slam by ${name}`);
+				logAction(`White Slam by ${name}.`);
+			});
+
+			$id('blackSlamButton').addEventListener('click', () => {
+				const name = getPlayerName($id('blackSlamDropdown').value);
+				showMessage(`Black Slam by ${name}`);
+				logAction(`Black Slam by ${name}.`);
+			});
+		}
+
+		// Swapping is its own inverse: running it twice returns everything
+		// to where it started, so Undo just has to call it again.
+		function swapPlayers() {
+			setQueenState(null);
+
+			const player1NameText = $id('player1NameText');
+			const player2NameText = $id('player2NameText');
+			const player1StateText = $id('player1StateText');
+			const player2StateText = $id('player2StateText');
+			const player1SetBoxText = $id('player1SetBoxText');
+			const player2SetBoxText = $id('player2SetBoxText');
+			const player1ScoreText = $id('player1ScoreText');
+			const player2ScoreText = $id('player2ScoreText');
+
+			[player1NameText.textContent, player2NameText.textContent] = [player2NameText.textContent, player1NameText.textContent];
+			[player1StateText.textContent, player2StateText.textContent] = [player2StateText.textContent, player1StateText.textContent];
+			[player1SetBoxText.textContent, player2SetBoxText.textContent] = [player2SetBoxText.textContent, player1SetBoxText.textContent];
+			[player1ScoreText.textContent, player2ScoreText.textContent] = [player2ScoreText.textContent, player1ScoreText.textContent];
+
+			// Swap the entire Player 1 / Player 2 input columns (label +
+			// input together) instead of swapping individual values -
+			// nothing inside either column changes, the whole block just
+			// relocates, so label text and typed values travel as a unit.
+			const player1Col = $id('player1Inputs');
+			const player2Col = $id('player2Inputs');
+			const columnsParent = player1Col.parentNode;
+			const swapMarker = document.createComment('swap-marker');
+			columnsParent.insertBefore(swapMarker, player1Col);
+			columnsParent.insertBefore(player1Col, player2Col.nextSibling);
+			columnsParent.insertBefore(player2Col, swapMarker);
+			columnsParent.removeChild(swapMarker);
+
+			updateLabels();
+		}
+
+		function wireSwapButton() {
+			$id('swapPlayersButton').addEventListener('click', () => {
+				const queenBefore = getQueenState();
+				pushUndo(() => {
+					swapPlayers();
+					setQueenState(queenBefore);
+				});
+				swapPlayers();
+				logAction('Swapped player sides.');
+			});
+		}
+
+		function wireMatchControlButtons() {
+			$id('newBoardButton').addEventListener('click', () => {
+				if (matchOver) {
+					logAction('Match already over - start a New Match first.');
+					return;
+				}
+				if (!confirm('Start the next board? This resets both scores and clears the queen status.')) return;
+				const valuesBefore = captureValues(['player1ScoreInput', 'player2ScoreInput', 'currentBoardInput']);
+				const queenBefore = getQueenState();
+				pushUndo(() => {
+					restoreValues(valuesBefore);
+					setQueenState(queenBefore);
+				});
+				advanceBoard();
+				logAction(`Advanced to board #${$id('currentBoardText').textContent}.`);
+			});
+
+			$id('newMatchButton').addEventListener('click', () => {
+				if (!confirm('Start a New Match? This resets sets, score, and board to zero. Player names/states are kept.')) return;
+				const ids = ['player1ScoreInput', 'player2ScoreInput', 'player1SetScoreInput', 'player2SetScoreInput', 'currentBoardInput'];
+				const valuesBefore = captureValues(ids);
+				const queenBefore = getQueenState();
+				const matchOverBefore = matchOver;
+				pushUndo(() => {
+					restoreValues(valuesBefore);
+					setQueenState(queenBefore);
+					setMatchOver(matchOverBefore);
+				});
+
+				ids.forEach((id) => {
+					const el = $id(id);
+					el.value = 0;
+					fireInput(el);
+				});
+				setQueenState(null);
+				setMatchOver(false);
+				logAction('Started a new match.');
+			});
+
+			$id('undoButton').addEventListener('click', () => undoLastAction());
+
+			$id('clearLogButton').addEventListener('click', () => {
+				actionLog.length = 0;
+				const list = $id('activityLog');
+				if (list) list.innerHTML = '';
+			});
+		}
+
+		// The log is a floating panel kept outside #inputSection's flex
+		// row entirely, so opening/closing it never changes the height of
+		// the control panel above.
+		function wireActivityLogToggle() {
+			const toggleBtn = $id('toggleLogButton');
+			const closeBtn = $id('closeLogButton');
+			const panel = $id('activityLogPanel');
+
+			toggleBtn.addEventListener('click', () => {
+				panel.hidden = !panel.hidden;
+				toggleBtn.textContent = panel.hidden ? 'Show Activity Log' : 'Hide Activity Log';
+			});
+
+			closeBtn.addEventListener('click', () => {
+				panel.hidden = true;
+				toggleBtn.textContent = 'Show Activity Log';
+			});
+		}
+
+		// ---------------------------------------------------------------
+		// Checkboxes: lock name/state inputs, highlight active player.
+		// These are UI preferences, not match data, so they intentionally
+		// aren't part of the undo stack.
+		// ---------------------------------------------------------------
+		function wireCheckboxes() {
+			const disableInputsCheckbox = $id('disableInputsCheckbox');
+			const player1NameInput = $id('player1NameInput');
+			const player2NameInput = $id('player2NameInput');
+			const player1StateInput = $id('player1StateInput');
+			const player2StateInput = $id('player2StateInput');
+
+			disableInputsCheckbox.addEventListener('change', () => {
+				const isDisabled = disableInputsCheckbox.checked;
+				[player1NameInput, player2NameInput, player1StateInput, player2StateInput].forEach((input) => {
+					input.disabled = isDisabled;
+					input.style.backgroundColor = isDisabled ? '#e0e0e0' : '';
+					input.style.cursor = isDisabled ? 'not-allowed' : '';
+				});
+			});
+
+			const activePlayer1Checkbox = $id('activePlayer1');
+			const activePlayer2Checkbox = $id('activePlayer2');
+			const player1playing = $id('player1playing');
+			const player2playing = $id('player2playing');
+
+			activePlayer1Checkbox.addEventListener('change', () => {
+				if (activePlayer1Checkbox.checked) {
+					activePlayer2Checkbox.checked = false;
+					player1playing.hidden = false;
+					player2playing.hidden = true;
+				} else {
+					player1playing.hidden = true;
+				}
+			});
+
+			activePlayer2Checkbox.addEventListener('change', () => {
+				if (activePlayer2Checkbox.checked) {
+					activePlayer1Checkbox.checked = false;
+					player2playing.hidden = false;
+					player1playing.hidden = true;
+				} else {
+					player2playing.hidden = true;
+				}
+			});
+		}
+
+		// ---------------------------------------------------------------
+		// Keyboard shortcuts - only act when the user isn't typing in a
+		// field, so they never hijack normal text entry.
+		// ---------------------------------------------------------------
+		function wireKeyboardShortcuts() {
+			document.addEventListener('keydown', (event) => {
+				const tag = (event.target.tagName || '').toLowerCase();
+				const isEditable = tag === 'input' || tag === 'textarea' || tag === 'select';
+
+				if (event.ctrlKey && event.key.toLowerCase() === 'z' && !isEditable) {
+					event.preventDefault();
+					undoLastAction();
+					return;
+				}
+
+				if (isEditable) return;
+
+				if (event.key === '1') $id('activePlayer1').click();
+				else if (event.key === '2') $id('activePlayer2').click();
+				else if (event.key.toLowerCase() === 'b' && !event.shiftKey) $id('newBoardButton').click();
+			});
+		}
+
+		// ---------------------------------------------------------------
+		// Init: each wiring step runs in isolation, so a single mistake
+		// can't cascade and silently disable every listener after it.
+		// ---------------------------------------------------------------
+		function init() {
+			$id('player1SetBoxText').textContent = '00';
+			$id('player2SetBoxText').textContent = '00';
+			$id('player1ScoreText').textContent = '00';
+			$id('player2ScoreText').textContent = '00';
+			$id('currentBoardText').textContent = '00';
+
+			safe(wireNameAndStateInputs, 'wireNameAndStateInputs');
+			safe(wireScoreInputs, 'wireScoreInputs');
+			safe(wireUndoableFocusSnapshots, 'wireUndoableFocusSnapshots');
+			safe(wireSteppers, 'wireSteppers');
+			safe(wireQueenButtons, 'wireQueenButtons');
+			safe(wireWinnerButton, 'wireWinnerButton');
+			safe(wireSlamButtons, 'wireSlamButtons');
+			safe(wireSwapButton, 'wireSwapButton');
+			safe(wireMatchControlButtons, 'wireMatchControlButtons');
+			safe(wireActivityLogToggle, 'wireActivityLogToggle');
+			safe(wireCheckboxes, 'wireCheckboxes');
+			safe(wireKeyboardShortcuts, 'wireKeyboardShortcuts');
+
+			updateLabels();
+			logAction('Scoreboard ready.');
+		}
+
+		init();
+    </script>
+</html>
+
