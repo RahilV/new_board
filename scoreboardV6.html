@@ -225,31 +225,13 @@
 
 			<!-- Match controls -->
 			<div id="matchControlsColumn" class="inputColumn">
-				<div id="matchOverBanner" hidden>MATCH OVER - start a New Match to continue</div>
-
 				<button id="undoButton" type="button" disabled>Undo Last Action (Ctrl+Z)</button>
-				<button id="newBoardButton" type="button">Start Next Board</button>
-				<button id="newMatchButton" type="button">New Match (Reset Scores)</button>
-				<button id="toggleLogButton" type="button">Show Activity Log</button>
 
 				<div id="shortcutLegend">
-					Shortcuts: <b>Ctrl+Z</b> Undo &middot; <b>1</b>/<b>2</b> Toggle highlight &middot; <b>B</b> Next board
+					Shortcuts: <b>Ctrl+Z</b> Undo &middot; <b>1</b>/<b>2</b> Toggle highlight
 					(disabled while typing in a text field)
 				</div>
 			</div>
-		</div>
-
-		<!-- Activity log - a floating panel toggled on demand, so it never
-		     affects the height of the control panel above. -->
-		<div id="activityLogPanel" class="floatingPanel" hidden>
-			<div class="floatingPanelHeader">
-				<span>Activity Log</span>
-				<div class="floatingPanelActions">
-					<button id="clearLogButton" type="button">Clear</button>
-					<button id="closeLogButton" type="button" aria-label="Close activity log">&times;</button>
-				</div>
-			</div>
-			<ul id="activityLog"></ul>
 		</div>
 
 		<!-- snackbar -->
@@ -291,27 +273,6 @@
 		}
 
 		// ---------------------------------------------------------------
-		// Activity log (operator-only - lives in #inputSection, never on
-		// the scoreboard itself, so it never ends up on stream).
-		// ---------------------------------------------------------------
-		const actionLog = [];
-		const LOG_LIMIT = 30;
-
-		function logAction(message) {
-			const time = new Date().toLocaleTimeString([], { hour12: false });
-			actionLog.unshift(`[${time}] ${message}`);
-			if (actionLog.length > LOG_LIMIT) actionLog.length = LOG_LIMIT;
-			const list = $id('activityLog');
-			if (!list) return;
-			list.innerHTML = '';
-			actionLog.forEach((line) => {
-				const li = document.createElement('li');
-				li.textContent = line;
-				list.appendChild(li);
-			});
-		}
-
-		// ---------------------------------------------------------------
 		// Undo stack - a list of small closures, each one capable of
 		// reversing exactly one user action. This works uniformly across
 		// value edits, queen-icon visibility, and the swap (which is its
@@ -326,14 +287,10 @@
 			refreshUndoButton();
 		}
 		function undoLastAction() {
-			if (!undoStack.length) {
-				logAction('Nothing to undo.');
-				return;
-			}
+			if (!undoStack.length) return;
 			const undoFn = undoStack.pop();
 			safe(undoFn, 'undo');
 			refreshUndoButton();
-			logAction('Undo: reverted last action.');
 		}
 		function refreshUndoButton() {
 			setDisabled('undoButton', undoStack.length === 0);
@@ -357,37 +314,32 @@
 			});
 		}
 
+		// The queen icons live in fixed on-screen boxes (player1QueenIcon is
+		// always the LEFT box), but "player1"/"player2" everywhere else
+		// means the data column, which travels with the swap instead of
+		// staying on a fixed side. playersSwapped tracks the difference so
+		// a data key can be mapped to the correct on-screen box and back.
+		let playersSwapped = false;
+		function mapKeyThroughSwap(key) {
+			if (key === null) return null;
+			if (!playersSwapped) return key;
+			return key === 'player1' ? 'player2' : 'player1';
+		}
+
 		function getQueenState() {
 			const p1 = $id('player1QueenIcon');
 			const p2 = $id('player2QueenIcon');
-			if (p1 && p1.style.display === 'inline') return 'player1';
-			if (p2 && p2.style.display === 'inline') return 'player2';
-			return null;
+			let slot = null;
+			if (p1 && p1.style.display === 'inline') slot = 'player1';
+			else if (p2 && p2.style.display === 'inline') slot = 'player2';
+			return mapKeyThroughSwap(slot);
 		}
 		function setQueenState(key) {
+			const slot = mapKeyThroughSwap(key);
 			const p1 = $id('player1QueenIcon');
 			const p2 = $id('player2QueenIcon');
-			if (p1) p1.style.display = key === 'player1' ? 'inline' : 'none';
-			if (p2) p2.style.display = key === 'player2' ? 'inline' : 'none';
-		}
-
-		// ---------------------------------------------------------------
-		// Match-over state: locks score-changing controls until a new
-		// match is started.
-		// ---------------------------------------------------------------
-		let matchOver = false;
-		const MATCH_LOCK_IDS = ['player1ScoreInput', 'player2ScoreInput', 'player1SetScoreInput', 'player2SetScoreInput'];
-		const MATCH_LOCK_BUTTON_IDS = ['queenPocketedButton', 'winnerButton', 'whiteSlamButton', 'blackSlamButton', 'newBoardButton'];
-
-		function setMatchOver(flag) {
-			matchOver = flag;
-			const banner = $id('matchOverBanner');
-			if (banner) banner.hidden = !flag;
-			MATCH_LOCK_IDS.forEach((id) => setDisabled(id, flag));
-			document
-				.querySelectorAll(MATCH_LOCK_IDS.map((id) => `.stepBtn[data-target="${id}"]`).join(', '))
-				.forEach((btn) => (btn.disabled = flag));
-			MATCH_LOCK_BUTTON_IDS.forEach((id) => setDisabled(id, flag));
+			if (p1) p1.style.display = slot === 'player1' ? 'inline' : 'none';
+			if (p2) p2.style.display = slot === 'player2' ? 'inline' : 'none';
 		}
 
 		function advanceBoard() {
@@ -561,7 +513,6 @@
 				setQueenState(key);
 				const name = getPlayerName(key);
 				showMessage(`${name} pocketed the queen`);
-				logAction(`${name} pocketed the queen.`);
 			});
 
 			$id('clearQueenButton').addEventListener('click', () => {
@@ -569,27 +520,20 @@
 				if (!queenBefore) return;
 				pushUndo(() => setQueenState(queenBefore));
 				setQueenState(null);
-				logAction('Cleared queen icon.');
 			});
 		}
 
 		function wireWinnerButton() {
 			$id('winnerButton').addEventListener('click', () => {
-				if (matchOver) {
-					logAction('Match already over - start a New Match first.');
-					return;
-				}
 				const key = $id('winnerDropdown').value;
 				const name = getPlayerName(key);
 				if (!confirm(`Confirm: ${name} wins this board?`)) return;
 
 				const valuesBefore = captureValues(['player1ScoreInput', 'player2ScoreInput', 'player1SetScoreInput', 'player2SetScoreInput', 'currentBoardInput']);
 				const queenBefore = getQueenState();
-				const matchOverBefore = matchOver;
 				pushUndo(() => {
 					restoreValues(valuesBefore);
 					setQueenState(queenBefore);
-					setMatchOver(matchOverBefore);
 				});
 
 				const setInput = $id(key === 'player1' ? 'player1SetScoreInput' : 'player2SetScoreInput');
@@ -598,12 +542,9 @@
 				fireInput(setInput);
 
 				if (Number(setInput.value) >= setsToWin) {
-					setMatchOver(true);
 					showMessage(`${name} WINS THE MATCH!`);
-					logAction(`${name} wins the match (${$id('player1SetScoreInput').value}-${$id('player2SetScoreInput').value} sets).`);
 				} else {
 					showMessage(`${name} wins the game`);
-					logAction(`${name} wins board #${$id('currentBoardText').textContent}.`);
 					advanceBoard();
 				}
 			});
@@ -613,19 +554,18 @@
 			$id('whiteSlamButton').addEventListener('click', () => {
 				const name = getPlayerName($id('whiteSlamDropdown').value);
 				showMessage(`White Slam by ${name}`);
-				logAction(`White Slam by ${name}.`);
 			});
 
 			$id('blackSlamButton').addEventListener('click', () => {
 				const name = getPlayerName($id('blackSlamDropdown').value);
 				showMessage(`Black Slam by ${name}`);
-				logAction(`Black Slam by ${name}.`);
 			});
 		}
 
 		// Swapping is its own inverse: running it twice returns everything
 		// to where it started, so Undo just has to call it again.
 		function swapPlayers() {
+			playersSwapped = !playersSwapped;
 			setQueenState(null);
 
 			const player1NameText = $id('player1NameText');
@@ -666,75 +606,11 @@
 					setQueenState(queenBefore);
 				});
 				swapPlayers();
-				logAction('Swapped player sides.');
 			});
 		}
 
-		function wireMatchControlButtons() {
-			$id('newBoardButton').addEventListener('click', () => {
-				if (matchOver) {
-					logAction('Match already over - start a New Match first.');
-					return;
-				}
-				if (!confirm('Start the next board? This resets both scores and clears the queen status.')) return;
-				const valuesBefore = captureValues(['player1ScoreInput', 'player2ScoreInput', 'currentBoardInput']);
-				const queenBefore = getQueenState();
-				pushUndo(() => {
-					restoreValues(valuesBefore);
-					setQueenState(queenBefore);
-				});
-				advanceBoard();
-				logAction(`Advanced to board #${$id('currentBoardText').textContent}.`);
-			});
-
-			$id('newMatchButton').addEventListener('click', () => {
-				if (!confirm('Start a New Match? This resets sets, score, and board to zero. Player names/states are kept.')) return;
-				const ids = ['player1ScoreInput', 'player2ScoreInput', 'player1SetScoreInput', 'player2SetScoreInput', 'currentBoardInput'];
-				const valuesBefore = captureValues(ids);
-				const queenBefore = getQueenState();
-				const matchOverBefore = matchOver;
-				pushUndo(() => {
-					restoreValues(valuesBefore);
-					setQueenState(queenBefore);
-					setMatchOver(matchOverBefore);
-				});
-
-				ids.forEach((id) => {
-					const el = $id(id);
-					el.value = 0;
-					fireInput(el);
-				});
-				setQueenState(null);
-				setMatchOver(false);
-				logAction('Started a new match.');
-			});
-
+		function wireUndoButton() {
 			$id('undoButton').addEventListener('click', () => undoLastAction());
-
-			$id('clearLogButton').addEventListener('click', () => {
-				actionLog.length = 0;
-				const list = $id('activityLog');
-				if (list) list.innerHTML = '';
-			});
-		}
-
-		// The log is a floating panel kept outside #inputSection's flex
-		// row entirely, so opening/closing it never changes the height of
-		// the control panel above.
-		function wireActivityLogToggle() {
-			const toggleBtn = $id('toggleLogButton');
-			const closeBtn = $id('closeLogButton');
-			const panel = $id('activityLogPanel');
-
-			toggleBtn.addEventListener('click', () => {
-				panel.hidden = !panel.hidden;
-				toggleBtn.textContent = panel.hidden ? 'Show Activity Log' : 'Hide Activity Log';
-			});
-
-			closeBtn.addEventListener('click', () => {
-				panel.hidden = true;
-				toggleBtn.textContent = 'Show Activity Log';
-			});
 		}
 
 		// ---------------------------------------------------------------
@@ -803,7 +679,6 @@
 
 				if (event.key === '1') $id('activePlayer1').click();
 				else if (event.key === '2') $id('activePlayer2').click();
-				else if (event.key.toLowerCase() === 'b' && !event.shiftKey) $id('newBoardButton').click();
 			});
 		}
 
@@ -826,13 +701,11 @@
 			safe(wireWinnerButton, 'wireWinnerButton');
 			safe(wireSlamButtons, 'wireSlamButtons');
 			safe(wireSwapButton, 'wireSwapButton');
-			safe(wireMatchControlButtons, 'wireMatchControlButtons');
-			safe(wireActivityLogToggle, 'wireActivityLogToggle');
+			safe(wireUndoButton, 'wireUndoButton');
 			safe(wireCheckboxes, 'wireCheckboxes');
 			safe(wireKeyboardShortcuts, 'wireKeyboardShortcuts');
 
 			updateLabels();
-			logAction('Scoreboard ready.');
 		}
 
 		init();
