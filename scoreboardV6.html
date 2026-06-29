@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html lang="en">
 	<head>
 		<meta charset="utf-8">
 		<script type="text/javascript" src="importantFiles/overlay/js/jquery.3.5.1.min.js"></script>
@@ -236,7 +236,7 @@
 
 		<!-- snackbar -->
 		<div class="snackbar" id="snackbar"></div>
-	</body>
+
 	<script type="text/javascript">
 
 		// ---------------------------------------------------------------
@@ -395,31 +395,40 @@
 		// numeric field is clamped through Number.isFinite, so a cleared
 		// field or pasted text can never show "NaN" on stream (V3's bug).
 		// ---------------------------------------------------------------
-		function wireNameAndStateInputs() {
+			function wireNameAndStateInputs() {
+			function updateDropdownOptions() {
+				const p1Name = $id('player1NameInput').value || 'Player 1';
+				const p2Name = $id('player2NameInput').value || 'Player 2';
+
+				const dropdowns = ['#queenPocketedDropdown', '#winnerDropdown', '#whiteSlamDropdown', '#blackSlamDropdown'];
+				dropdowns.forEach((sel) => {
+					document.querySelector(`${sel} option[value="player1"]`).textContent = p1Name;
+					document.querySelector(`${sel} option[value="player2"]`).textContent = p2Name;
+				});
+			}
+
 			$id('player1NameInput').addEventListener('input', (event) => {
-				$id('player1NameText').textContent = event.target.value;
-				document.querySelector('#queenPocketedDropdown option[value="player1"]').textContent = event.target.value || 'Player 1';
-				document.querySelector('#winnerDropdown option[value="player1"]').textContent = event.target.value || 'Player 1';
-				document.querySelector('#whiteSlamDropdown option[value="player1"]').textContent = event.target.value || 'Player 1';
-				document.querySelector('#blackSlamDropdown option[value="player1"]').textContent = event.target.value || 'Player 1';
+				const target = playersSwapped ? 'player2NameText' : 'player1NameText';
+				$id(target).textContent = event.target.value;
+				updateDropdownOptions();
 				updateLabels();
 			});
 
 			$id('player2NameInput').addEventListener('input', (event) => {
-				$id('player2NameText').textContent = event.target.value;
-				document.querySelector('#queenPocketedDropdown option[value="player2"]').textContent = event.target.value || 'Player 2';
-				document.querySelector('#winnerDropdown option[value="player2"]').textContent = event.target.value || 'Player 2';
-				document.querySelector('#whiteSlamDropdown option[value="player2"]').textContent = event.target.value || 'Player 2';
-				document.querySelector('#blackSlamDropdown option[value="player2"]').textContent = event.target.value || 'Player 2';
+				const target = playersSwapped ? 'player1NameText' : 'player2NameText';
+				$id(target).textContent = event.target.value;
+				updateDropdownOptions();
 				updateLabels();
 			});
 
 			$id('player1StateInput').addEventListener('input', (event) => {
-				$id('player1StateText').textContent = event.target.value;
+				const target = playersSwapped ? 'player2StateText' : 'player1StateText';
+				$id(target).textContent = event.target.value;
 			});
 
 			$id('player2StateInput').addEventListener('input', (event) => {
-				$id('player2StateText').textContent = event.target.value;
+				const target = playersSwapped ? 'player1StateText' : 'player2StateText';
+				$id(target).textContent = event.target.value;
 			});
 		}
 
@@ -427,25 +436,29 @@
 			$id('player1SetScoreInput').addEventListener('input', (event) => {
 				const value = clamp(event.target.value, 0, Number(event.target.max) || 3);
 				event.target.value = value;
-				$id('player1SetBoxText').textContent = value.toString().padStart(2, '0');
+				const target = playersSwapped ? 'player2SetBoxText' : 'player1SetBoxText';
+				$id(target).textContent = value.toString().padStart(2, '0');
 			});
 
 			$id('player2SetScoreInput').addEventListener('input', (event) => {
 				const value = clamp(event.target.value, 0, Number(event.target.max) || 3);
 				event.target.value = value;
-				$id('player2SetBoxText').textContent = value.toString().padStart(2, '0');
+				const target = playersSwapped ? 'player1SetBoxText' : 'player2SetBoxText';
+				$id(target).textContent = value.toString().padStart(2, '0');
 			});
 
 			$id('player1ScoreInput').addEventListener('input', (event) => {
 				const value = clamp(event.target.value, 0, 99);
 				event.target.value = value;
-				$id('player1ScoreText').textContent = value.toString().padStart(2, '0');
+				const target = playersSwapped ? 'player2ScoreText' : 'player1ScoreText';
+				$id(target).textContent = value.toString().padStart(2, '0');
 			});
 
 			$id('player2ScoreInput').addEventListener('input', (event) => {
 				const value = clamp(event.target.value, 0, 99);
 				event.target.value = value;
-				$id('player2ScoreText').textContent = value.toString().padStart(2, '0');
+				const target = playersSwapped ? 'player1ScoreText' : 'player2ScoreText';
+				$id(target).textContent = value.toString().padStart(2, '0');
 			});
 
 			$id('currentBoardInput').addEventListener('input', (event) => {
@@ -469,12 +482,18 @@
 			ids.forEach((id) => {
 				const el = $id(id);
 				if (!el) return;
+				let valueOnFocus;
 				el.addEventListener('focus', () => {
-					const prevValue = el.value;
-					pushUndo(() => {
-						el.value = prevValue;
-						fireInput(el);
-					});
+					valueOnFocus = el.value;
+				});
+				el.addEventListener('blur', () => {
+					if (el.value !== valueOnFocus) {
+						const prevValue = valueOnFocus;
+						pushUndo(() => {
+							el.value = prevValue;
+							fireInput(el);
+						});
+					}
 				});
 			});
 		}
@@ -527,26 +546,7 @@
 			$id('winnerButton').addEventListener('click', () => {
 				const key = $id('winnerDropdown').value;
 				const name = getPlayerName(key);
-				if (!confirm(`Confirm: ${name} wins this board?`)) return;
-
-				const valuesBefore = captureValues(['player1ScoreInput', 'player2ScoreInput', 'player1SetScoreInput', 'player2SetScoreInput', 'currentBoardInput']);
-				const queenBefore = getQueenState();
-				pushUndo(() => {
-					restoreValues(valuesBefore);
-					setQueenState(queenBefore);
-				});
-
-				const setInput = $id(key === 'player1' ? 'player1SetScoreInput' : 'player2SetScoreInput');
-				const setsToWin = Number(setInput.max) || 3;
-				setInput.value = clamp(Number(setInput.value || 0) + 1, 0, setsToWin);
-				fireInput(setInput);
-
-				if (Number(setInput.value) >= setsToWin) {
-					showMessage(`${name} WINS THE MATCH!`);
-				} else {
-					showMessage(`${name} wins the game`);
-					advanceBoard();
-				}
+				showMessage(`${name} wins the board!`);
 			});
 		}
 
@@ -565,27 +565,22 @@
 		// Swapping is its own inverse: running it twice returns everything
 		// to where it started, so Undo just has to call it again.
 		function swapPlayers() {
+			const queenKey = getQueenState();
 			playersSwapped = !playersSwapped;
-			setQueenState(null);
 
-			const player1NameText = $id('player1NameText');
-			const player2NameText = $id('player2NameText');
-			const player1StateText = $id('player1StateText');
-			const player2StateText = $id('player2StateText');
-			const player1SetBoxText = $id('player1SetBoxText');
-			const player2SetBoxText = $id('player2SetBoxText');
-			const player1ScoreText = $id('player1ScoreText');
-			const player2ScoreText = $id('player2ScoreText');
+			// Re-fire all input listeners — they are swap-aware and will
+			// write each value to the correct on-screen display element
+			// based on the new playersSwapped state. Input values and the
+			// control panel stay untouched.
+			[
+				'player1NameInput', 'player2NameInput',
+				'player1StateInput', 'player2StateInput',
+				'player1ScoreInput', 'player2ScoreInput',
+				'player1SetScoreInput', 'player2SetScoreInput',
+			].forEach((id) => fireInput($id(id)));
 
-			[player1NameText.textContent, player2NameText.textContent] = [player2NameText.textContent, player1NameText.textContent];
-			[player1StateText.textContent, player2StateText.textContent] = [player2StateText.textContent, player1StateText.textContent];
-			[player1SetBoxText.textContent, player2SetBoxText.textContent] = [player2SetBoxText.textContent, player1SetBoxText.textContent];
-			[player1ScoreText.textContent, player2ScoreText.textContent] = [player2ScoreText.textContent, player1ScoreText.textContent];
-
-			// Swap the entire Player 1 / Player 2 input columns (label +
-			// input together) instead of swapping individual values -
-			// nothing inside either column changes, the whole block just
-			// relocates, so label text and typed values travel as a unit.
+			// Swap the input columns visually so the control panel
+			// mirrors the on-screen scoreboard layout.
 			const player1Col = $id('player1Inputs');
 			const player2Col = $id('player2Inputs');
 			const columnsParent = player1Col.parentNode;
@@ -595,6 +590,7 @@
 			columnsParent.insertBefore(player2Col, swapMarker);
 			columnsParent.removeChild(swapMarker);
 
+			setQueenState(queenKey);
 			updateLabels();
 		}
 
@@ -640,22 +636,26 @@
 			const player2playing = $id('player2playing');
 
 			activePlayer1Checkbox.addEventListener('change', () => {
+				const myIndicator = playersSwapped ? player2playing : player1playing;
+				const otherIndicator = playersSwapped ? player1playing : player2playing;
 				if (activePlayer1Checkbox.checked) {
 					activePlayer2Checkbox.checked = false;
-					player1playing.hidden = false;
-					player2playing.hidden = true;
+					myIndicator.hidden = false;
+					otherIndicator.hidden = true;
 				} else {
-					player1playing.hidden = true;
+					myIndicator.hidden = true;
 				}
 			});
 
 			activePlayer2Checkbox.addEventListener('change', () => {
+				const myIndicator = playersSwapped ? player1playing : player2playing;
+				const otherIndicator = playersSwapped ? player2playing : player1playing;
 				if (activePlayer2Checkbox.checked) {
 					activePlayer1Checkbox.checked = false;
-					player2playing.hidden = false;
-					player1playing.hidden = true;
+					myIndicator.hidden = false;
+					otherIndicator.hidden = true;
 				} else {
-					player2playing.hidden = true;
+					myIndicator.hidden = true;
 				}
 			});
 		}
@@ -710,5 +710,6 @@
 
 		init();
     </script>
+	</body>
 </html>
 
